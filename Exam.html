@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+  <title>Lưu Dấu Học Tập</title>
+  <!-- Liên kết CSS mới -->
+  <link rel="stylesheet" href="css/styleD.css">
+<link rel="manifest" href="/manifest.json" />
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<meta name="theme-color" content="#0b1220" />
+
+<!-- <<<< THAY THẾ DÒNG SCRIPT MATHJAX CŨ BẰNG TOÀN BỘ KHỐI NÀY >>>> -->
+
+<!-- Cấu hình MathJax tối ưu -->
+<script>
+  window.MathJax = {
+    tex: {
+      // Yêu cầu sử dụng các gói 'ams' (cho toán nâng cao) và 'mhchem' (cho hóa học)
+      packages: {'[+]': ['ams', 'mhchem']}
+    }
+  };
+</script>
+
+<!-- Tải MathJax -->
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- <<<< KẾT THÚC KHỐI MATHJAX >>>> -->
+
+</head>
+<body>
+ <!-- ============================================== -->
+  <!-- DÁN ĐOẠN CODE LỚP PHỦ ĐANG TẢI VÀO NGAY ĐÂY -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner"></div>
+    <p id="loading-text">Đang tải đề thi...</p>
+  </div>
+  <!-- ============================================== -->
+  
+  <!-- HỘP THÔNG BÁO TOAST (Dán vào đây) -->
+  <div id="toast" class="toast">
+    <span id="toast-message"></span>
+  </div>  
+
+<!-- Header cố định -->
+<header class="sticky-header">
+
+  <!-- HÀNG TRÊN -->
+  <div class="header-top">
+    <!-- Cột trái: Logo -->
+    <div class="header-left">
+      <a href="/" title="Quay về Trang chủ">
+        <img src="icons/logo.png" alt="Logo" class="logo">
+      </a>
+    </div>
+
+    <!-- Cột giữa: Tên đề bài -->
+    <div class="header-center">
+      <!-- GIỮ NGUYÊN NỘI DUNG GỐC CỦA BẠN -->
+      <h1 class="title" id="examTitle">LƯU DẤU HỌC TẬP</h1> 
+    </div>
+
+    <!-- Cột phải: Link trang chủ -->
+    <div class="header-right">
+      <a href="/" class="home-link-container">
+        <img src="/icons/LDHT logo.png" alt="logo Lưu dấu học tập" class="home-link-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+    </svg>
+      </a>
+    </div>
+  </div> <!-- Thẻ đóng của .header-top -->
+
+  <!-- HÀNG DƯỚI -->
+  <div class="header-bottom">
+    <!-- Navigator (giữa) -->
+    <div id="navigator" hidden>
+      <div class="navigator-title">Trạng thái trả lời</div>
+      <div id="navigator-items"></div>
+    </div>
+
+    <!-- Timer (phải) -->
+    <div id="timer-container" class="timer-container" hidden>
+      <span id="timer">00:00</span>
+      <span id="timeWarn" hidden></span>
+    </div>
+  </div> <!-- Thẻ đóng của .header-bottom -->
+
+</header>
+
+  <!-- Thanh điều khiển -->
+  <section class="control-bar">
+    <div class="controls-row">
+      <div class="left">
+        <button id="btn-guidelines" class="action-btn btn-guide">Hướng dẫn làm bài</button>
+      </div>
+      <div class="right">
+        <button id="btn-start" class="action-btn btn-start">Bắt đầu làm</button>
+      </div>
+    </div>
+    <div id="guidelines" class="guidelines" hidden>
+      <h3>Hướng dẫn làm bài</h3>
+      <p>- Đọc kỹ câu hỏi và chọn đáp án đúng.</p>
+      <p>- Khi đã sẵn sàng, nhấn <b>Bắt đầu làm</b>.</p>
+      <p>- Có thể lưu tạm trong quá trình làm.</p>
+      <p>- Nộp bài khi hoàn thành hoặc khi hết giờ.</p>
+    </div>
+  </section>
+
+  <!-- Nội dung chính -->
+  <main>
+    <!-- Thông tin học sinh (ẩn lúc đầu) -->
+    <section class="card" id="student-info">
+      <h3>Thông tin học sinh</h3>
+      <div class="grid two">
+        <input type="text" id="studentName" placeholder="Họ và tên" class="form-field">
+        <input type="text" id="studentId" placeholder="Mã số học sinh (VD: Lớp 67 + Mã số 04 = 6704)" class="form-field">
+      </div>
+      <div class="grid two">
+        <input type="text" id="className" placeholder="Lớp" class="form-field">
+        <input type="email" id="email" placeholder="Email (không bắt buộc)" class="form-field">
+      </div>
+    </section>
+
+    <!-- Khu vực câu hỏi (ẩn lúc đầu) -->
+    <section id="questions" hidden>
+      <!-- Câu hỏi sẽ được render tại đây bởi appF.js -->
+    </section>
+
+    <!-- Kết quả và phản hồi -->
+    <section id="resultCard" class="card hidden">
+      <h3>Kết quả làm bài</h3>
+      <div id="resultSummary"></div>
+      <div id="feedback"></div>
+      <div id="answerReveal" hidden>
+        <h4>Đáp án chi tiết</h4>
+        <div id="correctAnswers"></div>
+      </div>
+    </section>
+
+    <!-- Tiến độ trả lời (ẩn lúc đầu, chỉ hiển thị khi làm bài) -->
+    <div id="answer-progress" class="answer-progress" hidden>
+      Đã trả lời: <span id="answeredCount">0</span>/<span id="totalCount">0</span>
+    </div>
+
+    <!-- Cụm nút cuối trang (ẩn lúc đầu) -->
+    <section class="end-controls" hidden id="end-controls">
+      <div class="btn-group-center">
+        <button id="btn-save" class="action-btn btn-save">Lưu tạm</button>
+        <button id="btn-clear" class="action-btn btn-clear">Xoá dữ liệu tạm</button>
+        <button id="btn-submit" class="action-btn btn-submit">Nộp bài</button>
+      </div>
+    </section>
+  </main>
+
+<!-- Thêm thư viện SortableJS để hỗ trợ kéo-thả -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+  <!-- Script JS mới -->
+  <script type="module" src="js/appF.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js").catch(console.error);
+    });
+  }
+</script>
+
+</body>
+</html>
