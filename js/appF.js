@@ -261,80 +261,74 @@ if (q.youtubeEmbedUrl) {
     const questionType = q.questionType || 'multiple_choice';
 
     switch (questionType) {
-      case 'fill_blank':
-        answerBlockHtml = `<div class="answer-container-fill-blank"><input type="text" name="${q.id}" id="ans-${q.id}" class="fill-blank-input" placeholder="Nhập câu trả lời..."></div>`;
-        break;
-
-      case 'matching':
-        const colA = q.answers;
-        const colB = q.options || []; // Đảm bảo an toàn nếu không có options
-        const shuffledColB = [...colB].sort(() => Math.random() - 0.5);
-
-        answerBlockHtml = `
-            <div class="matching-container">
-                <div class="matching-column">
-                    <strong>Cột A</strong>
-                    ${colA.map((item, index) => `<div class="matching-item-a">${['A', 'B', 'C', 'D'][index]}. ${escapeHtml(item)}</div>`).join('')}
-                </div>
-                <div class="matching-column">
-                    <strong>Cột B</strong>
-                    ${shuffledColB.map((item, index) => `<div class="matching-item-b">${index + 1}. ${escapeHtml(item)}</div>`).join('')}
-                </div>
-            </div>
-            <div class="matching-inputs">
-                ${colA.map((_, index) => {
-                    const optionLetter = ['A', 'B', 'C', 'D'][index];
-                    return `
-                        <div class="matching-input-row">
-                            <span>Ghép ${optionLetter} với:</span>
-                            <select class="matching-select" data-col-a-option="${optionLetter}">
-                                <option value="">Chọn...</option>
-                                ${colB.map((_, b_index) => `<option value="${b_index + 1}">${b_index + 1}</option>`).join('')}
-                            </select>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        `;
-        break;
-
-      case 'ordering':
-    // Xáo trộn các lựa chọn để hiển thị ở cột bên phải
-    const shuffledAnswers = [...q.answers].sort(() => Math.random() - 0.5);
-    const answerOptions = ['A', 'B', 'C', 'D']; // Giả định ID của các mục
-
-    answerBlockHtml = `
-        <p class="ordering-instruction">Kéo và thả các mục từ cột phải vào đúng vị trí ở cột trái:</p>
-        <div class="ordering-layout">
-            <!-- Cột trái: Các khe cắm cố định -->
-            <div id="ordering-slots-${q.id}" class="ordering-slots">
-                ${q.answers.map((_, index) => `
-                    <div class="ordering-slot">
-                        <span class="ordering-slot-number">${index + 1}.</span>
-                    </div>
-                `).join('')}
-            </div>
-            <!-- Cột phải: Các mục có thể kéo -->
-            <div id="ordering-source-${q.id}" class="ordering-source-container">
-                ${shuffledAnswers.map(ans => {
-                    const originalIndex = q.answers.indexOf(ans);
-                    const optionLetter = answerOptions[originalIndex];
-                    return `<div class="ordering-item" data-id="${optionLetter}">${escapeHtml(ans)}</div>`;
-                }).join('')}
-            </div>
-        </div>
-    `;
+  case 'fill_blank': {
+    answerBlockHtml = `<div class="answer-container-fill-blank"><input type="text" name="${q.id}" id="ans-${q.id}" class="fill-blank-input" placeholder="Nhập câu trả lời..."></div>`;
     break;
+  }
 
-      case 'multiple_choice':
-      default:
-        const mcOptions = ['A', 'B', 'C', 'D'];
-        answerBlockHtml = q.answers.map((ans, ansIdx) => {
-          const option = mcOptions[ansIdx];
-          return `<label class="answer" for="ans-${q.id}-${option}"><input type="radio" name="${q.id}" id="ans-${q.id}-${option}" value="${option}"><span>${escapeHtml(ans)}</span></label>`;
-        }).join('');
-        break;
-    }
+  case 'matching': {
+    const colA = q.answers;
+    const colB = q.options || [];
+    const shuffledColB = [...colB].sort(() => Math.random() - 0.5);
+    answerBlockHtml = `
+      <div class="matching-container">
+          <div class="matching-column">
+              <strong>Cột A</strong>
+              ${colA.map((item, index) => `<div class="matching-item-a">${['A', 'B', 'C', 'D'][index]}. ${escapeHtml(item)}</div>`).join('')}
+          </div>
+          <div class="matching-column">
+              <strong>Cột B</strong>
+              ${shuffledColB.map(item => `<div class="matching-item-b">${escapeHtml(item)}</div>`).join('')}
+          </div>
+      </div>
+      <div class="matching-inputs">
+          ${colA.map((_, index) => {
+              const optionLetter = ['A', 'B', 'C', 'D'][index];
+              return `
+                  <div class="matching-input-row">
+                      <span>Ghép ${optionLetter} với:</span>
+                      <select class="matching-select" data-col-a-index="${index}">
+                          <option value="">Chọn...</option>
+                          ${shuffledColB.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('')}
+                      </select>
+                  </div>
+              `;
+          }).join('')}
+      </div>`;
+    break;
+  }
+
+  case 'ordering': {
+    const shuffledAnswers = [...q.answers].sort(() => Math.random() - 0.5);
+    answerBlockHtml = `
+      <p class="ordering-instruction">Kéo và thả các mục từ cột phải vào đúng vị trí ở cột trái:</p>
+      <div class="ordering-layout">
+          <div id="ordering-slots-${q.id}" class="ordering-slots">
+              ${q.answers.map((_, index) => `
+                  <div class="ordering-slot">
+                      <span class="ordering-slot-number">${index + 1}.</span>
+                  </div>
+              `).join('')}
+          </div>
+          <div id="ordering-source-${q.id}" class="ordering-source-container">
+              ${shuffledAnswers.map(ans => `<div class="ordering-item">${escapeHtml(ans)}</div>`).join('')}
+          </div>
+      </div>`;
+    break;
+  }
+
+  case 'multiple_choice':
+  default: {
+    const shuffledAnswers = [...q.answers].sort(() => Math.random() - 0.5);
+    answerBlockHtml = shuffledAnswers.map((ans, ansIdx) => {
+      return `<label class="answer" for="ans-${q.id}-${ansIdx}">
+                <input type="radio" name="${q.id}" id="ans-${q.id}-${ansIdx}" value="${escapeHtml(ans)}">
+                <span>${escapeHtml(ans)}</span>
+              </label>`;
+    }).join('');
+    break;
+  }
+}
 
     // --- Ghép tất cả các mảnh HTML lại ---
     const questionCardHtml = `
@@ -461,33 +455,33 @@ function handleMatchingChange(e) {
   const selectElement = e.target;
   const qCard = selectElement.closest('.q-card');
   const qid = qCard.id.replace('card-', '');
+  const questionData = state.questions.find(q => q.id === qid);
+  if (!questionData) return;
 
-  // Thu thập tất cả các cặp đã chọn
   const allSelects = qCard.querySelectorAll('.matching-select');
   const pairs = [];
+
   allSelects.forEach(sel => {
-    const colA = sel.dataset.colAOption;
-    const colB = sel.value;
-    if (colA && colB) {
-      pairs.push(`${colA}-${colB}`);
+    const colAIndex = parseInt(sel.dataset.colAIndex, 10);
+    const selectedColBContent = sel.value; // Lấy value trực tiếp từ select
+
+    if (!isNaN(colAIndex) && selectedColBContent) {
+      const colBIndex = questionData.options.indexOf(selectedColBContent);
+      if (colBIndex > -1) {
+        pairs.push(`${colAIndex}-${colBIndex}`);
+      }
     }
   });
 
-  // Nếu đã ghép đủ tất cả các cặp, lưu lại câu trả lời
   if (pairs.length === allSelects.length) {
-    state.answers[qid] = pairs.join(',');
-    handleAnswered(qid);
-    paintNavigator();
-    updateAnsweredCount();
+    state.answers[qid] = pairs.sort().join(',');
   } else {
-    // Nếu chưa ghép đủ, xóa câu trả lời cũ (nếu có)
-    if (state.answers[qid]) {
-      delete state.answers[qid];
-      handleAnswered(qid); // Vẫn gọi để cập nhật thời gian
-      paintNavigator();
-      updateAnsweredCount();
-    }
+    delete state.answers[qid];
   }
+  
+  handleAnswered(qid);
+  paintNavigator();
+  updateAnsweredCount();
 }
 
 /**
@@ -923,22 +917,46 @@ async function submitExam(auto = false) {
             }
             // ===== KẾT THÚC PHẦN BỔ SUNG =====
 
-            if (isCorrect) {
-                exp.innerHTML = `<strong>Đúng!</strong> ${escapeHtml(qData.explain)}`;
-                card.classList.add('correct');
-                qTitleEl.innerHTML = `<span class="result-icon correct-icon">✔</span>` + qTitleEl.innerHTML;
-            } else if (studentAnswer) {
-                const displayCorrectAnswer = qData.correct.split('|').join(' hoặc ');
-                // SỬA LỖI BẢO MẬT #2: Escape đáp án đúng trước khi hiển thị.
-                exp.innerHTML = `<strong>Sai.</strong> Đáp án đúng là <strong>${escapeHtml(displayCorrectAnswer)}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
-                card.classList.add('incorrect');
-                qTitleEl.innerHTML = `<span class="result-icon incorrect-icon">✖</span>` + qTitleEl.innerHTML;
-            } else {
-                const displayCorrectAnswer = qData.correct.split('|').join(' hoặc ');
-                // SỬA LỖI BẢO MẬT #2: Escape đáp án đúng trước khi hiển thị.
-                exp.innerHTML = `<strong>Chưa trả lời.</strong> Đáp án đúng là <strong>${escapeHtml(displayCorrectAnswer)}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
-                qTitleEl.innerHTML = `<span class="result-icon unanswered-icon">−</span>` + qTitleEl.innerHTML;
-            }
+            let friendlyCorrectAnswer = '';
+
+switch (questionType) {
+    case 'matching': {
+        if (qData.correct && Array.isArray(qData.options)) {
+            friendlyCorrectAnswer = qData.correct.split(',')
+                .map(pair => {
+                    const [aIndexStr, bIndexStr] = pair.split('-');
+                    const aIndex = parseInt(aIndexStr, 10), bIndex = parseInt(bIndexStr, 10);
+                    const letterA = ['A', 'B', 'C', 'D'][aIndex];
+                    const contentB = qData.options[bIndex];
+                    if (letterA && contentB) return `${letterA} - ${contentB}`;
+                    return pair;
+                }).join('; ');
+        } else { friendlyCorrectAnswer = qData.correct; }
+        break;
+    }
+    case 'ordering':
+        friendlyCorrectAnswer = qData.correct.split('||').join(' → ');
+        break;
+    case 'fill_blank':
+        friendlyCorrectAnswer = qData.correct.split('|').join(' hoặc ');
+        break;
+    default:
+        friendlyCorrectAnswer = qData.correct;
+        break;
+}
+
+if (isCorrect) {
+    exp.innerHTML = `<strong>Đúng!</strong> ${escapeHtml(qData.explain)}`;
+    card.classList.add('correct');
+    qTitleEl.innerHTML = `<span class="result-icon correct-icon">✔</span>` + qTitleEl.innerHTML;
+} else if (studentAnswer) {
+    exp.innerHTML = `<strong>Sai.</strong> Đáp án đúng là <strong>${escapeHtml(friendlyCorrectAnswer)}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
+    card.classList.add('incorrect');
+    qTitleEl.innerHTML = `<span class="result-icon incorrect-icon">✖</span>` + qTitleEl.innerHTML;
+} else {
+    exp.innerHTML = `<strong>Chưa trả lời.</strong> Đáp án đúng là <strong>${escapeHtml(friendlyCorrectAnswer)}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
+    qTitleEl.innerHTML = `<span class="result-icon unanswered-icon">−</span>` + qTitleEl.innerHTML;
+}
         });
     }
     
@@ -974,60 +992,42 @@ function setButtonsDisabled(disabled) {
 
 // <<<< THAY THẾ TOÀN BỘ HÀM NÀY >>>>
 function activateOrderingQuestions() {
-  // Tìm tất cả các container của câu hỏi sắp xếp
   const orderingQuestions = $$('.q-card[data-question-type="ordering"]');
   
   orderingQuestions.forEach(qCard => {
-    // ===== SỬA LỖI: KHAI BÁO `qid` Ở ĐÂY =====
     const qid = qCard.id.replace('card-', '');
     const slots = qCard.querySelectorAll('.ordering-slot');
-    const sourceContainer = qCard.querySelector(`#ordering-source-${qid}`); // Sửa lại tên biến cho đúng
+    const sourceContainer = qCard.querySelector(`#ordering-source-${qid}`);
+    const questionData = state.questions.find(q => q.id === qid);
+    if (!slots.length || !sourceContainer || !questionData) return;
 
-    if (!slots.length || !sourceContainer) return;
-
-    // --- Hàm chung để xử lý khi có thay đổi ---
     const handleSortEnd = () => {
       const itemsInSlots = qCard.querySelectorAll('.ordering-slots .ordering-item');
-      
-      if (itemsInSlots.length === slots.length) {
+      if (itemsInSlots.length === questionData.answers.length) {
         const sortedItems = Array.from(itemsInSlots).sort((a, b) => {
           const slotA = a.closest('.ordering-slot');
           const slotB = b.closest('.ordering-slot');
           return Array.from(slots).indexOf(slotA) - Array.from(slots).indexOf(slotB);
         });
-        
-        const newOrder = sortedItems.map(item => item.dataset.id);
-        state.answers[qid] = newOrder.join(',');
+        const newOrderContent = sortedItems.map(item => item.textContent.trim());
+        state.answers[qid] = newOrderContent.join('||');
       } else {
         delete state.answers[qid];
       }
-      
       handleAnswered(qid);
       paintNavigator();
       updateAnsweredCount();
     };
 
-    // --- Kích hoạt Sortable cho Cột Phải (Nguồn) ---
     new Sortable(sourceContainer, {
-      group: {
-        name: `group-${qid}`, // Bây giờ biến `qid` đã tồn tại
-        pull: true,
-        put: true
-      },
-      animation: 150,
-      ghostClass: 'sortable-ghost',
+      group: { name: `group-${qid}`, pull: true, put: true },
+      animation: 150, ghostClass: 'sortable-ghost',
     });
 
-    // --- Kích hoạt Sortable cho TỪNG Khe cắm ở Cột Trái ---
     slots.forEach(slot => {
       new Sortable(slot, {
-        group: {
-          name: `group-${qid}`, // Bây giờ biến `qid` đã tồn tại
-          pull: true,
-          put: true
-        },
-        animation: 150,
-        ghostClass: 'sortable-ghost',
+        group: { name: `group-${qid}`, pull: true, put: true },
+        animation: 150, ghostClass: 'sortable-ghost',
         onAdd: function (evt) {
           if (slot.getElementsByClassName('ordering-item').length > 1) {
             const oldItem = (evt.from === sourceContainer) ? slot.children[0] : slot.children[1];
