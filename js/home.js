@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-btn');
     const studentGreeting = document.getElementById('student-greeting');
     const examListContainer = document.getElementById('exam-list');
-    const loadingMessage = document.getElementById('loading-message');
+    const loadingContainer = document.getElementById('loading-container');
 
     // =================================================================
     //      PHẦN 2: CÁC HÀM XỬ LÝ LOGIC CHÍNH
@@ -137,35 +137,41 @@ document.addEventListener('DOMContentLoaded', () => {
      * Gọi API để lấy danh sách bài tập và hiển thị ra màn hình.
      */
     async function fetchAndDisplayExams() {
-        try {
-            loadingMessage.style.display = 'block';
-            examListContainer.innerHTML = ''; // Xóa danh sách cũ
-            const response = await fetch(`${API_URL}?action=getExamList`);
-            if (!response.ok) throw new Error('Không thể kết nối đến máy chủ.');
-            const result = await response.json();
-            if (!result.success) throw new Error(result.message);
+    try {
+        // HIỂN THỊ SPINNER
+        loadingContainer.classList.remove('hidden');
+        examListContainer.innerHTML = ''; // Xóa danh sách cũ (nếu có)
+        
+        const response = await fetch(`${API_URL}?action=getExamList`);
+        if (!response.ok) throw new Error('Không thể kết nối đến máy chủ.');
+        const result = await response.json();
+        if (!result.success) throw new Error(result.message);
 
-            const exams = result.data;
-            loadingMessage.style.display = 'none';
+        const exams = result.data;
+        
+        // ẨN SPINNER SAU KHI CÓ KẾT QUẢ
+        loadingContainer.classList.add('hidden');
 
-            if (exams.length === 0) {
-                examListContainer.innerHTML = '<p style="text-align: center;">Hiện chưa có bài tập nào được giao.</p>';
-                return;
-            }
-
-            exams.forEach(exam => {
-                const link = document.createElement('a');
-                link.className = 'exam-link';
-                link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
-                link.innerHTML = `<h3>${exam.title}</h3><p>Thời gian làm bài: ${exam.durationMinutes} phút</p>`;
-                examListContainer.appendChild(link);
-            });
-        } catch (error) {
-            console.error("Lỗi khi tải danh sách bài tập:", error);
-            loadingMessage.textContent = `Lỗi: ${error.message}. Vui lòng thử tải lại trang.`;
-            loadingMessage.style.color = 'red';
+        if (exams.length === 0) {
+            examListContainer.innerHTML = '<p style="text-align: center;">Hiện chưa có bài tập nào được giao.</p>';
+            return;
         }
+
+        exams.forEach(exam => {
+            const link = document.createElement('a');
+            link.className = 'exam-link';
+            link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
+            link.innerHTML = `<h3>${exam.title}</h3><p>Thời gian làm bài: ${exam.durationMinutes} phút</p>`;
+            examListContainer.appendChild(link);
+        });
+    } catch (error) {
+        console.error("Lỗi khi tải danh sách bài tập:", error);
+        
+        // HIỂN THỊ LỖI VÀ ẨN SPINNER
+        loadingContainer.classList.add('hidden');
+        examListContainer.innerHTML = `<p style="text-align: center; color: red;">Lỗi: ${error.message}. Vui lòng thử tải lại trang.</p>`;
     }
+}
 
     // =================================================================
     //      PHẦN 3: KHỞI TẠO TRANG

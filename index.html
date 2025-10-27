@@ -77,9 +77,9 @@
     <!-- PHẦN 1: KHUNG ĐĂNG NHẬP (HIỂN THỊ KHI CHƯA LƯU THÔNG TIN) -->
     <section id="login-container" class="card" style="max-width: 680px; margin: 8vh auto; border: 1px solid var(--primary); padding: 3rem 2.5rem; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);">
         
-        <h2 style="text-align: center; color: var(--accent); margin-top: 0; margin-bottom: 1rem; font-size: 2rem;">Chào mừng các em học sinh!</h2>
+        <h2 style="text-align: center; color: var(--accent); margin-top: 0; margin-bottom: 1rem; font-size: 2rem;">CHÀO MỪNG CÁC EM HỌC SINH!</h2>
         
-        <p style="text-align: center; font-size: 1.25rem; font-weight: bold; color: #e5e7eb; margin-bottom: 2.5rem; opacity: 0.9;">Hãy điền thông tin của em để bắt đầu:</p>
+        <p style="text-align: center; font-size: 1.25rem; font-weight: bold; color: #e5e7eb; margin-bottom: 2.5rem; opacity: 0.9;">Hãy điền thông tin của em để bắt đầu</p>
         
         <div class="form-group">
             <input type="text" id="studentName" placeholder="Họ và tên" class="form-field" style="padding: 15px; font-size: 1.1rem; background: rgba(11, 19, 36, 0.6);">
@@ -109,7 +109,10 @@
 
         <!-- Danh sách bài tập -->
         <section id="exam-list" class="exam-list">
-            <p id="loading-message" style="text-align: center;">Đang tải danh sách bài tập...</p>
+            <div id="loading-container" class="hidden">
+    <div class="spinner"></div>
+    <p>Đang tải dữ liệu...</p>
+</div>
             <!-- Danh sách bài tập sẽ được chèn vào đây bởi home.js -->
         </section>
     </section>
