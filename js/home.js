@@ -1,4 +1,4 @@
-// /js/home.js - PHIÊN BẢN SỬA LỖI & HOÀN CHỈNH UX
+// /js/home.js - PHIÊN BẢN CUỐI CÙNG (Thêm chức năng phím Enter)
 
 /**
  * Hàm tạo PWA Manifest động.
@@ -37,12 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //      PHẦN 1: KHỞI TẠO CÁC BIẾN VÀ CẤU HÌNH
     // =================================================================
 
-    /**
-     * Lấy mã lớp từ tham số 'lop' hoặc 'class' trên URL.
-     * @returns {string | null} Mã lớp hoặc null nếu không tìm thấy.
-     */
     function getClassCodeFromURL() {
-        // SỬA LỖI: Chỉ dùng một "new" duy nhất.
         const params = new URLSearchParams(window.location.search);
         const classCode = params.get('lop') || params.get('class');
         if (classCode) {
@@ -53,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const classCode = getClassCodeFromURL();
 
-    // Nếu không có mã lớp, hiển thị lỗi và dừng toàn bộ script
     if (!classCode) {
         document.body.innerHTML = `<div style="text-align: center; padding: 50px; font-family: sans-serif; color: white;">
                                     <h1>Lỗi: Không tìm thấy mã lớp</h1>
@@ -62,14 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return; 
     }
 
-    // Thiết lập các biến toàn cục cho trang
     const API_URL = `/api/${classCode}/`;
     const STUDENT_INFO_KEY = `ldht-student-info-${classCode}`;
-    
-    // Kích hoạt PWA động
     generateDynamicManifest(classCode);
 
-    // Khai báo các phần tử DOM để sử dụng nhiều lần
     const loginContainer = document.getElementById('login-container');
     const contentContainer = document.getElementById('content-container');
     const studentNameInput = document.getElementById('studentName');
@@ -85,9 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //      PHẦN 2: CÁC HÀM XỬ LÝ LOGIC CHÍNH
     // =================================================================
 
-    /**
-     * Lấy thông tin từ form, kiểm tra, lưu vào Local Storage và cập nhật giao diện.
-     */
     function saveAndProceed() {
         const studentInfo = {
             name: studentNameInput.value.trim(),
@@ -102,9 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateView(studentInfo);
     }
 
-    /**
-     * Xóa thông tin học sinh khỏi Local Storage và quay lại màn hình đăng nhập.
-     */
     function logout() {
         if (confirm('Bạn có chắc chắn muốn xóa thông tin cá nhân trên trình duyệt này không?')) {
             localStorage.removeItem(STUDENT_INFO_KEY);
@@ -112,19 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Điều khiển giao diện: Hiển thị form đăng nhập hoặc nội dung chính.
-     * @param {object | null} studentInfo - Đối tượng thông tin học sinh hoặc null.
-     */
     function updateView(studentInfo) {
         if (studentInfo && studentInfo.name) {
-            // Trạng thái ĐÃ ĐĂNG NHẬP
             loginContainer.classList.add('hidden');
             contentContainer.classList.remove('hidden');
             studentGreeting.innerHTML = `Xin chào, ${studentInfo.name}!`;
             fetchAndDisplayExams();
         } else {
-            // Trạng thái CHƯA ĐĂNG NHẬP
             loginContainer.classList.remove('hidden');
             contentContainer.classList.add('hidden');
             studentNameInput.value = '';
@@ -133,15 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Gọi API để lấy danh sách bài tập và hiển thị ra màn hình.
-     */
-    async function fetchAndDisplayExams() {
+async function fetchAndDisplayExams() {
     try {
-        // HIỂN THỊ SPINNER
+        // BƯỚC 1: Ẩn danh sách bài tập (nếu đang hiện) và HIỂN THỊ SPINNER
+        examListContainer.classList.add('hidden');
         loadingContainer.classList.remove('hidden');
-        examListContainer.innerHTML = ''; // Xóa danh sách cũ (nếu có)
         
+        // BƯỚC 2: GỌI API
         const response = await fetch(`${API_URL}?action=getExamList`);
         if (!response.ok) throw new Error('Không thể kết nối đến máy chủ.');
         const result = await response.json();
@@ -149,27 +125,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const exams = result.data;
         
-        // ẨN SPINNER SAU KHI CÓ KẾT QUẢ
-        loadingContainer.classList.add('hidden');
-
+        // BƯỚC 3: Xử lý dữ liệu và chèn vào examListContainer (lúc này nó đang bị ẩn)
+        examListContainer.innerHTML = ''; // Luôn xóa nội dung cũ
         if (exams.length === 0) {
             examListContainer.innerHTML = '<p style="text-align: center;">Hiện chưa có bài tập nào được giao.</p>';
-            return;
+        } else {
+            exams.forEach(exam => {
+                const link = document.createElement('a');
+                link.className = 'exam-link';
+                link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
+                link.innerHTML = `<h3>${exam.title}</h3><p>Thời gian làm bài: ${exam.durationMinutes} phút</p>`;
+                examListContainer.appendChild(link);
+            });
         }
 
-        exams.forEach(exam => {
-            const link = document.createElement('a');
-            link.className = 'exam-link';
-            link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
-            link.innerHTML = `<h3>${exam.title}</h3><p>Thời gian làm bài: ${exam.durationMinutes} phút</p>`;
-            examListContainer.appendChild(link);
-        });
+        // BƯỚC 4: ẨN SPINNER và HIỂN THỊ DANH SÁCH BÀI TẬP
+        loadingContainer.classList.add('hidden');
+        examListContainer.classList.remove('hidden');
+
     } catch (error) {
         console.error("Lỗi khi tải danh sách bài tập:", error);
         
-        // HIỂN THỊ LỖI VÀ ẨN SPINNER
+        // KHI CÓ LỖI: ẨN SPINNER và HIỂN THỊ THÔNG BÁO LỖI
         loadingContainer.classList.add('hidden');
-        examListContainer.innerHTML = `<p style="text-align: center; color: red;">Lỗi: ${error.message}. Vui lòng thử tải lại trang.</p>`;
+        examListContainer.innerHTML = `<p style="text-align: center; color: var(--bad);">Lỗi: ${error.message}. Vui lòng thử tải lại trang.</p>`;
+        examListContainer.classList.remove('hidden'); // Hiển thị khu vực chứa lỗi
     }
 }
 
@@ -177,12 +157,22 @@ document.addEventListener('DOMContentLoaded', () => {
     //      PHẦN 3: KHỞI TẠO TRANG
     // =================================================================
 
-    /**
-     * Hàm khởi tạo chính của trang: gắn sự kiện và kiểm tra trạng thái đăng nhập.
-     */
     function initializePage() {
+        // Gắn sự kiện click cho các nút
         continueBtn.addEventListener('click', saveAndProceed);
         logoutBtn.addEventListener('click', logout);
+
+        // === START: THÊM CHỨC NĂNG PHÍM ENTER ===
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Ngăn hành vi mặc định (nếu có)
+                saveAndProceed(); // Gọi hàm xử lý như khi click nút
+            }
+        }
+        studentNameInput.addEventListener('keydown', handleEnterKey);
+        studentIdInput.addEventListener('keydown', handleEnterKey);
+        classNameInput.addEventListener('keydown', handleEnterKey);
+        // === END: THÊM CHỨC NĂNG PHÍM ENTER ===
 
         const savedInfoRaw = localStorage.getItem(STUDENT_INFO_KEY);
         let savedInfo = null;
@@ -190,14 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 savedInfo = JSON.parse(savedInfoRaw);
             } catch (e) {
-                // Nếu dữ liệu trong localStorage bị lỗi, xóa nó đi
                 localStorage.removeItem(STUDENT_INFO_KEY);
             }
         }
-        // Cập nhật giao diện dựa trên thông tin đã lưu (hoặc không)
         updateView(savedInfo);
     }
 
-    // Chạy hàm khởi tạo
     initializePage();
 });
