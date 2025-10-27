@@ -27,6 +27,20 @@ if (!classCode && !window.location.pathname.endsWith('Dashboard.html') && !windo
 
 // Xây dựng API_URL động
 const API_URL = classCode ? `/api/${classCode}/` : "/api/default/"; // Thêm một backend mặc định nếu cần
+// ===== START: Cập nhật link Logo động =====
+function updateHomeLink(classCode) {
+    if (!classCode) return; // Không làm gì nếu không có mã lớp
+
+    const homeLink = document.getElementById('home-link');
+    if (homeLink) {
+        // Gán link chính xác, bao gồm cả mã lớp
+        homeLink.href = `/Index.html?lop=${classCode}`;
+    }
+}
+
+// Gọi hàm này ngay sau khi đã xác định được classCode
+updateHomeLink(classCode);
+// ===== END: Cập nhật link Logo động =====
 // ===== END: API URL Động cho Multi-Tenant =====
 
 // ===== Utils =====
@@ -808,32 +822,50 @@ function clearLocal() {
   } catch(e) {}
 }
 
-function readStudent(){
-  if ($('#studentName')) state.student.name = $('#studentName').value.trim();
-  if ($('#studentId')) state.student.id = $('#studentId').value.trim();
-  if ($('#className')) state.student.className = $('#className').value.trim();
-  if ($('#email')) state.student.email = $('#email').value.trim();
+function readStudent() {
+    // Lấy mã lớp từ URL để tạo key chính xác
+    const params = new URLSearchParams(window.location.search);
+    const classCode = params.get('lop') || params.get('class');
+    const STUDENT_INFO_KEY = `ldht-student-info-${classCode}`;
+
+    const savedInfoRaw = localStorage.getItem(STUDENT_INFO_KEY);
+    if (savedInfoRaw) {
+        try {
+            const savedInfo = JSON.parse(savedInfoRaw);
+            state.student.name = savedInfo.name || '';
+            state.student.id = savedInfo.id || '';
+            state.student.className = savedInfo.className || '';
+            state.student.email = ''; // Email không còn được nhập
+        } catch (e) {
+            console.error("Lỗi đọc thông tin học sinh từ Local Storage.");
+            // Xử lý trường hợp dữ liệu bị lỗi
+            state.student = { name: '', id: '', className: '', email: '' };
+        }
+    } else {
+        // Trường hợp học sinh vào thẳng trang exam mà chưa qua trang chủ
+        state.student = { name: '', id: '', className: '', email: '' };
+    }
 }
 
-function validateBeforeSubmit(){
-  readStudent();
-  const missing=[];
-  if (!state.student.name) missing.push('Họ và tên');
-  if (!state.student.id) missing.push('Mã học sinh');
-  if (!state.student.className) missing.push('Lớp');
-  if (missing.length){
-    alert('Vui lòng điền: '+missing.join(', '));
-    return false;
-  }
-  
-  // SỬA DÒNG NÀY: Dùng state.exam.questions thay vì MOCK_EXAM.questions
-  const total = state.exam.questions.length;
-  const answered = Object.keys(state.answers).length;
-  
-  if (answered < total){
-    return confirm(`Em còn ${total - answered} câu chưa trả lời. Em vẫn muốn nộp luôn?`);
-  }
-  return true;
+function validateBeforeSubmit() {
+    readStudent(); // Luôn đọc thông tin mới nhất
+
+    if (!state.student.name || !state.student.id || !state.student.className) {
+        alert('Thông tin của em chưa được lưu. Hệ thống sẽ đưa em về trang chủ để nhập thông tin.');
+        // Lấy mã lớp từ URL để điều hướng chính xác
+        const params = new URLSearchParams(window.location.search);
+        const classCode = params.get('lop') || params.get('class');
+        window.location.href = `/Index.html?lop=${classCode}`;
+        return false; // Ngăn việc nộp bài
+    }
+    
+    const total = state.exam.questions.length;
+    const answered = Object.keys(state.answers).length;
+    
+    if (answered < total) {
+        return confirm(`Em còn ${total - answered} câu chưa trả lời. Em vẫn muốn nộp luôn?`);
+    }
+    return true;
 }
 
 

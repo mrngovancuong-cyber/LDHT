@@ -78,8 +78,25 @@
             <h2>Chào mừng các em học sinh!</h2>
             <p>Hãy chọn một bài tập bên dưới để bắt đầu ôn luyện kiến thức nhé.</p>
         </section>
+	
+	<section id="student-login-section" class="card">
+            <h3 id="student-greeting">Nhập thông tin của em để bắt đầu</h3>
+            <div id="student-login-form">
+                <div class="grid two">
+                    <input type="text" id="studentName" placeholder="Họ và tên" class="form-field">
+                    <input type="text" id="studentId" placeholder="Mã số học sinh (VD: 6704)" class="form-field">
+                </div>
+                <div class="grid two">
+                    <input type="text" id="className" placeholder="Lớp" class="form-field">
+                    <button id="save-student-info-btn" class="action-btn btn-start" style="width: 100%;">Lưu thông tin</button>
+                </div>
+            </div>
+            <div id="student-logout-section" class="hidden" style="text-align: right;">
+                 <button id="logout-btn" class="action-btn btn-clear">Đây không phải là em? (Xóa thông tin)</button>
+            </div>
+        </section>
 
-        <section id="exam-list" class="exam-list">
+        <section id="exam-list" class="exam-list" hidden>
             <p id="loading-message" style="text-align: center;">Đang tải danh sách bài tập...</p>
             <!-- Danh sách bài tập sẽ được chèn vào đây bởi home.js -->
         </section>
