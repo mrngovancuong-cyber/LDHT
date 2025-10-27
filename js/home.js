@@ -65,7 +65,7 @@ const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
                 const link = document.createElement('a');
                 link.className = 'exam-link';
                 // Tạo link dẫn đến trang làm bài, kèm theo examId
-                link.href = `/Exam.html?examId=${exam.examId}`;
+                link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
                 
                 // Sử dụng template literal để tạo nội dung HTML bên trong thẻ <a>
                 link.innerHTML = `

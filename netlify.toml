@@ -27,8 +27,9 @@
   # trình duyệt sẽ không biết có sự chuyển hướng này.
   status = 200
 
-# Quy tắc cho backend của Thầy Cường (mã lớp: thaycuong)
+# Quy tắc cho backend của Cô Tâm Đặng (mã lớp: cotamdang)
 [[redirects]]
   from = "/api/cotamdang/*"
   to = "https://script.google.com/macros/s/AKfycbz50Pu2CkK3bQQIJD-nvlDN1hljmf4kwwLy5WzhhrNlV0f4GlUyYaRjA4oCEWNKOjhE/exec"
   status = 200
+
