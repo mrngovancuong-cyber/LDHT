@@ -30,6 +30,48 @@ const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
     const examListContainer = document.getElementById('exam-list');
     const loadingMessage = document.getElementById('loading-message');
 
+// ===== START: Dynamic PWA Manifest Generator =====
+
+function generateDynamicManifest(classCode) {
+  // Nếu không có mã lớp, không làm gì cả
+  if (!classCode) return;
+
+  // 1. Tạo đối tượng Manifest cơ bản
+  const manifest = {
+    "name": `LDHT - Lớp ${classCode}`, // Tên ứng dụng sẽ hiển thị lớp!
+    "short_name": `LDHT ${classCode}`, // Tên ngắn cũng vậy
+    "start_url": `/Index.html?lop=${classCode}`, // <-- ĐÂY LÀ PHẦN QUAN TRỌNG NHẤT
+    "display": "standalone",
+    "background_color": "#0b1220",
+    "theme_color": "#0b1220",
+    "scope": "/",
+    "icons": [
+      { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" },
+      { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png" }
+    ]
+  };
+
+  // 2. Chuyển đối tượng manifest thành một chuỗi JSON
+  const manifestString = JSON.stringify(manifest);
+  
+  // 3. Tạo một "Blob" - một đối tượng giống như file trong bộ nhớ
+  const blob = new Blob([manifestString], { type: 'application/json' });
+  
+  // 4. Tạo một URL trỏ đến Blob này
+  const manifestURL = URL.createObjectURL(blob);
+
+  // 5. Tìm thẻ link và gán URL của manifest động vào
+  const manifestLink = document.getElementById('manifest-link');
+  if (manifestLink) {
+    manifestLink.href = manifestURL;
+  }
+}
+
+// Gọi hàm này ngay sau khi đã xác định được classCode
+generateDynamicManifest(classCode);
+
+// ===== END: Dynamic PWA Manifest Generator =====
+
     /**
      * Hàm này sẽ gọi API để lấy danh sách các bài kiểm tra
      * và sau đó hiển thị chúng ra màn hình.

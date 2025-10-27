@@ -7,6 +7,8 @@
     
     <!-- SỬA LẠI: Liên kết đến file CSS chung của dự án -->
     <link rel="stylesheet" href="css/styleHome.css">
+    <link id="manifest-link" rel="manifest" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <!-- Thêm một vài style riêng cho trang chủ -->
     <style>
         .welcome-section { 
@@ -84,5 +86,13 @@
     </main>
 
     <script src="js/home.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js").catch(console.error);
+    });
+  }
+</script>
 </body>
 </html>
