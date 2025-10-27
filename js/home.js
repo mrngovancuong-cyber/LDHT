@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Trạng thái ĐÃ ĐĂNG NHẬP
             loginContainer.classList.add('hidden');
             contentContainer.classList.remove('hidden');
-            studentGreeting.innerHTML = `Xin chào, <strong>${studentInfo.name}</strong> (${studentInfo.className} - ${studentInfo.id})`;
+            studentGreeting.innerHTML = `Xin chào, ${studentInfo.name}!`;
             fetchAndDisplayExams();
         } else {
             // Trạng thái CHƯA ĐĂNG NHẬP
