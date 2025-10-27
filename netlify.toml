@@ -1,35 +1,34 @@
 # File cấu hình cho Netlify
+
 [build]
-  # Netlify sẽ tự động chạy "npm install" dựa vào package.json
   command = "echo 'Build command is not needed for this static site'"
-  
-  # Chỉ cho Netlify biết nơi chứa các file function
   functions = "netlify/functions"
-  
-  # Chỉ cho Netlify biết thư mục chứa các file web tĩnh (HTML, CSS, JS)
-  # Dấu "." có nghĩa là thư mục gốc
   publish = "." 
 
-# THÊM CÁC DÒNG NÀY VÀO
 [functions]
   node_bundler = "esbuild"
-# KẾT THÚC PHẦN THÊM
 
-# Cấu hình chuyển hướng (redirect) để tạo proxy
-[[redirects]]
-  # Bất kỳ request nào bắt đầu bằng /api/
-  from = "/api/*"
-  
-  # Sẽ được chuyển hướng đến function tên là "proxy"
-  to = "/.netlify/functions/proxy/:splat"
-  
-  # Status 200 có nghĩa là "chuyển hướng ngầm" (rewrite), 
-  # trình duyệt sẽ không biết có sự chuyển hướng này.
-  status = 200
+# ===================================================================
+#           QUAN TRỌNG: QUY TẮC CỤ THỂ PHẢI ĐẶT LÊN TRÊN
+# ===================================================================
 
 # Quy tắc cho backend của Cô Tâm Đặng (mã lớp: cotamdang)
+# Netlify sẽ kiểm tra quy tắc này TRƯỚC TIÊN.
 [[redirects]]
   from = "/api/cotamdang/*"
   to = "https://script.google.com/macros/s/AKfycbz50Pu2CkK3bQQIJD-nvlDN1hljmf4kwwLy5WzhhrNlV0f4GlUyYaRjA4oCEWNKOjhE/exec"
   status = 200
 
+# (Trong tương lai, bạn sẽ thêm quy tắc cho các giáo viên khác ở đây)
+
+
+# ===================================================================
+#     QUY TẮC CHUNG (DỰ PHÒNG) SẼ ĐƯỢC ĐẶT Ở DƯỚI CÙNG
+# ===================================================================
+
+# Bất kỳ request nào bắt đầu bằng /api/ MÀ KHÔNG KHỚP VỚI CÁC QUY TẮC BÊN TRÊN
+# sẽ được chuyển hướng đến function tên là "proxy".
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/proxy/:splat"
+  status = 200
