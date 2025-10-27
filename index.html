@@ -74,33 +74,42 @@
     </header>
 
     <main>
-        <section class="welcome-section">
-            <h2>Chào mừng các em học sinh!</h2>
-            <p>Hãy chọn một bài tập bên dưới để bắt đầu ôn luyện kiến thức nhé.</p>
-        </section>
-	
-	<section id="student-login-section" class="card">
-            <h3 id="student-greeting">Nhập thông tin của em để bắt đầu</h3>
-            <div id="student-login-form">
-                <div class="grid two">
-                    <input type="text" id="studentName" placeholder="Họ và tên" class="form-field">
-                    <input type="text" id="studentId" placeholder="Mã số học sinh (VD: 6704)" class="form-field">
-                </div>
-                <div class="grid two">
-                    <input type="text" id="className" placeholder="Lớp" class="form-field">
-                    <button id="save-student-info-btn" class="action-btn btn-start" style="width: 100%;">Lưu thông tin</button>
-                </div>
-            </div>
-            <div id="student-logout-section" class="hidden" style="text-align: right;">
-                 <button id="logout-btn" class="action-btn btn-clear">Đây không phải là em? (Xóa thông tin)</button>
-            </div>
-        </section>
+    <!-- PHẦN 1: LỜI CHÀO CHUNG (LUÔN HIỂN THỊ) -->
+    <section class="welcome-section">
+        <h2>Chào mừng các em học sinh!</h2>
+    </section>
 
-        <section id="exam-list" class="exam-list" hidden>
+    <!-- PHẦN 2: KHUNG ĐĂNG NHẬP (ẨN KHI ĐÃ LƯU THÔNG TIN) -->
+    <section id="login-container" class="card" style="max-width: 600px; margin: 0 auto 2rem auto;">
+        <p style="text-align: center; font-size: 1.1rem;">Hãy điền thông tin của em để bắt đầu:</p>
+        <div class="grid two">
+            <input type="text" id="studentName" placeholder="Họ và tên" class="form-field">
+            <input type="text" id="studentId" placeholder="Mã số học sinh (VD: 6704)" class="form-field">
+        </div>
+        <div class="grid one" style="margin-top: 1rem;">
+             <input type="text" id="className" placeholder="Lớp" class="form-field">
+        </div>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <button id="continue-btn" class="action-btn btn-start">Tiếp tục</button>
+        </div>
+    </section>
+
+    <!-- PHẦN 3: KHUNG NỘI DUNG CHÍNH (HIỂN THỊ SAU KHI LƯU THÔNG TIN) -->
+    <section id="content-container" class="hidden">
+        <div class="student-welcome-bar card">
+            <span id="student-greeting"></span>
+            <button id="logout-btn" class="action-btn btn-clear">Xóa thông tin cá nhân</button>
+        </div>
+        
+        <p style="text-align: center; font-size: 1.1rem; color: var(--accent); margin: 2rem 0;">Hãy chọn một bài tập bên dưới để bắt đầu ôn luyện kiến thức nhé.</p>
+
+        <section id="exam-list" class="exam-list">
             <p id="loading-message" style="text-align: center;">Đang tải danh sách bài tập...</p>
             <!-- Danh sách bài tập sẽ được chèn vào đây bởi home.js -->
         </section>
-    </main>
+    </section>
+
+</main>
 
     <script src="js/home.js"></script>
 

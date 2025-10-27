@@ -35,19 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // === KHAI BÁO CÁC PHẦN TỬ DOM CẦN THIẾT ===
-    const studentLoginSection = document.getElementById('student-login-section');
-    const studentLoginForm = document.getElementById('student-login-form');
-    const studentLogoutSection = document.getElementById('student-logout-section');
-    const studentGreeting = document.getElementById('student-greeting');
+    const loginContainer = document.getElementById('login-container');
+    const contentContainer = document.getElementById('content-container');
     const studentNameInput = document.getElementById('studentName');
     const studentIdInput = document.getElementById('studentId');
     const classNameInput = document.getElementById('className');
-    const saveBtn = document.getElementById('save-student-info-btn');
+    const continueBtn = document.getElementById('continue-btn');
     const logoutBtn = document.getElementById('logout-btn');
+    const studentGreeting = document.getElementById('student-greeting');
     const examListContainer = document.getElementById('exam-list');
     const loadingMessage = document.getElementById('loading-message');
 
-    // Tạo một key duy nhất cho Local Storage dựa trên mã lớp
     const STUDENT_INFO_KEY = `ldht-student-info-${classCode}`;
 
 
@@ -59,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Lấy thông tin từ form, kiểm tra và lưu vào Local Storage.
      * Sau đó gọi updateUI để cập nhật giao diện.
      */
-    function saveStudentInfo() {
+    function saveAndProceed() {
         const studentInfo = {
             name: studentNameInput.value.trim(),
             id: studentIdInput.value.trim(),
@@ -72,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         localStorage.setItem(STUDENT_INFO_KEY, JSON.stringify(studentInfo));
-        updateUI(studentInfo);
+        updateView(studentInfo);
     }
 
     /**
@@ -82,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function logout() {
         if (confirm('Bạn có chắc chắn muốn xóa thông tin cá nhân trên trình duyệt này không?')) {
             localStorage.removeItem(STUDENT_INFO_KEY);
-            updateUI(null);
+            updateView(null);
         }
     }
 
@@ -91,27 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
      * dựa vào việc có thông tin học sinh hay không.
      * @param {object | null} studentInfo - Đối tượng thông tin học sinh hoặc null.
      */
-    function updateUI(studentInfo) {
+    function updateView(studentInfo) {
         if (studentInfo && studentInfo.name) {
-            // ----- TRẠNG THÁI "ĐÃ ĐĂNG NHẬP" -----
-            studentGreeting.innerHTML = `Chào <span style="color: var(--accent);">${studentInfo.name}</span>!`;
-            studentLoginForm.classList.add('hidden');
-            studentLogoutSection.classList.remove('hidden');
-            
-            // Hiện danh sách bài tập và bắt đầu tải
-            examListContainer.hidden = false;
+            // Trạng thái ĐÃ ĐĂNG NHẬP
+            loginContainer.classList.add('hidden');
+            contentContainer.classList.remove('hidden');
+            studentGreeting.innerHTML = `Xin chào, <strong>${studentInfo.name}</strong> (${studentInfo.className} - ${studentInfo.id})`;
             fetchAndDisplayExams();
         } else {
-            // ----- TRẠNG THÁI "CHƯA ĐĂNG NHẬP" -----
-            studentGreeting.textContent = 'Nhập thông tin của em để bắt đầu';
-            studentLoginForm.classList.remove('hidden');
-            studentLogoutSection.classList.add('hidden');
-
-            // Ẩn danh sách bài tập và thông báo loading
-            examListContainer.hidden = true;
-            if(loadingMessage) loadingMessage.style.display = 'none';
-
-            // Xóa sạch các ô input để người mới có thể nhập
+            // Trạng thái CHƯA ĐĂNG NHẬP
+            loginContainer.classList.remove('hidden');
+            contentContainer.classList.add('hidden');
             studentNameInput.value = '';
             studentIdInput.value = '';
             classNameInput.value = '';
@@ -124,10 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function fetchAndDisplayExams() {
         try {
-            loadingMessage.style.display = 'block'; // Hiển thị lại thông báo "Đang tải..."
+            loadingMessage.style.display = 'block';
+            examListContainer.innerHTML = ''; // Xóa danh sách cũ
             const response = await fetch(`${API_URL}?action=getExamList`);
             if (!response.ok) throw new Error('Không thể kết nối đến máy chủ.');
-            
             const result = await response.json();
             if (!result.success) throw new Error(result.message);
 
@@ -139,20 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            examListContainer.innerHTML = '';
             exams.forEach(exam => {
                 const link = document.createElement('a');
                 link.className = 'exam-link';
-                // Đảm bảo link luôn truyền cả examId và mã lớp
                 link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
-                
-                link.innerHTML = `
-                    <h3>${exam.title}</h3>
-                    <p>Thời gian làm bài: ${exam.durationMinutes} phút</p>
-                `;
+                link.innerHTML = `<h3>${exam.title}</h3><p>Thời gian làm bài: ${exam.durationMinutes} phút</p>`;
                 examListContainer.appendChild(link);
             });
-
         } catch (error) {
             console.error("Lỗi khi tải danh sách bài tập:", error);
             loadingMessage.textContent = `Lỗi: ${error.message}. Vui lòng thử tải lại trang.`;
@@ -165,31 +146,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
 
     /**
-     * Hàm khởi tạo chính của trang, chạy ngay khi DOM đã sẵn sàng.
+     * Hàm khởi tạo chính của trang
      */
-    function initializePage() {
-        // Gắn sự kiện cho các nút
-        saveBtn.addEventListener('click', saveStudentInfo);
+     function initializePage() {
+        continueBtn.addEventListener('click', saveAndProceed);
         logoutBtn.addEventListener('click', logout);
 
-        // Kiểm tra xem có thông tin học sinh nào đã được lưu từ lần trước không
         const savedInfoRaw = localStorage.getItem(STUDENT_INFO_KEY);
         let savedInfo = null;
         if (savedInfoRaw) {
             try {
                 savedInfo = JSON.parse(savedInfoRaw);
             } catch (e) {
-                // Nếu dữ liệu trong localStorage bị lỗi, hãy xóa nó đi
                 localStorage.removeItem(STUDENT_INFO_KEY);
             }
         }
-        
-        // Cập nhật giao diện dựa trên thông tin đã lưu (hoặc không)
-        updateUI(savedInfo);
+        updateView(savedInfo);
     }
 
     initializePage();
-
 });
 
 // Hàm tạo PWA Manifest động (giữ nguyên, đã chính xác)
