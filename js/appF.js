@@ -1,6 +1,33 @@
 console.log("--- PHIÊN BẢN CODE MỚI NHẤT ĐÃ ĐƯỢC TẢI ---");
 
-const API_URL = "/api/";
+// ===== START: API URL Động cho Multi-Tenant =====
+function getClassCodeFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const classCode = params.get('lop') || params.get('class');
+  if (classCode) {
+    // Chỉ chấp nhận mã lớp hợp lệ (chữ và số, không có ký tự đặc biệt)
+    // để tăng cường bảo mật.
+    return classCode.replace(/[^a-zA-Z0-9]/g, '');
+  }
+  return null;
+}
+
+const classCode = getClassCodeFromURL();
+
+// Nếu không có mã lớp trong URL, hiển thị lỗi và dừng lại.
+// Điều này đảm bảo học sinh luôn phải vào từ link đúng.
+if (!classCode && !window.location.pathname.endsWith('Dashboard.html') && !window.location.pathname.endsWith('Index.html')) {
+    document.body.innerHTML = `<div style="text-align: center; padding: 50px; font-family: sans-serif;">
+                                <h1>Lỗi: Không tìm thấy mã lớp</h1>
+                                <p>Vui lòng truy cập trang web từ đường link được giáo viên cung cấp.</p>
+                              </div>`;
+    // Ném lỗi để dừng việc thực thi script
+    throw new Error("Mã lớp không được cung cấp trong URL.");
+}
+
+// Xây dựng API_URL động
+const API_URL = classCode ? `/api/${classCode}/` : "/api/default/"; // Thêm một backend mặc định nếu cần
+// ===== END: API URL Động cho Multi-Tenant =====
 
 // ===== Utils =====
 const $ = (s)=>document.querySelector(s);

@@ -2,7 +2,31 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // API_URL trỏ đến Netlify proxy của chúng ta
-    const API_URL = "/api/"; 
+    // ===== START: API URL Động cho Multi-Tenant =====
+function getClassCodeFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const classCode = params.get('lop') || params.get('class');
+  if (classCode) {
+    return classCode.replace(/[^a-zA-Z0-9]/g, '');
+  }
+  return null;
+}
+
+const classCode = getClassCodeFromURL();
+
+// Nếu trang chủ không có mã lớp, ta có thể hiển thị một thông báo chung
+if (!classCode) {
+    const loadingMessage = document.getElementById('loading-message');
+    if(loadingMessage) {
+        loadingMessage.innerHTML = '<h2>Chào mừng bạn đến với Lưu Dấu Học Tập!</h2><p>Vui lòng sử dụng đường link do giáo viên của bạn cung cấp để xem danh sách bài tập.</p>';
+        loadingMessage.style.color = '#e5e7eb';
+    }
+    // Ném lỗi để dừng việc thực thi script, không gọi API nữa.
+    throw new Error("Mã lớp không được cung cấp cho trang chủ.");
+}
+
+const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
+// ===== END: API URL Động cho Multi-Tenant ===== 
     const examListContainer = document.getElementById('exam-list');
     const loadingMessage = document.getElementById('loading-message');
 

@@ -34,7 +34,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let scoreTrendChart = null;
 
     // --- API URL ---
-    const API_URL = '/api/';
+    // ===== START: API URL Động cho Multi-Tenant =====
+function getClassCodeFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const classCode = params.get('lop') || params.get('class');
+  if (classCode) {
+    return classCode.replace(/[^a-zA-Z0-9]/g, '');
+  }
+  return null;
+}
+
+const classCode = getClassCodeFromURL();
+
+if (!classCode) {
+    document.body.innerHTML = `<div style="text-align: center; padding: 50px; font-family: sans-serif; color: white;">
+                                <h1>Lỗi: Vui lòng cung cấp mã lớp</h1>
+                                <p>Để truy cập dashboard, vui lòng thêm mã lớp của bạn vào URL. Ví dụ: .../Dashboard.html?lop=6a1</p>
+                              </div>`;
+    throw new Error("Mã lớp không được cung cấp cho Dashboard.");
+}
+
+const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
+// ===== END: API URL Động cho Multi-Tenant =====
 
     // --- CÁC HÀM XỬ LÝ ---
 
