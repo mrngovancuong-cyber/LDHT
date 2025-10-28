@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
-  <title>Lưu Dấu Học Tập</title>
-  <!-- Liên kết CSS mới -->
-  <link rel="stylesheet" href="css/styleD.css">
-<link id="manifest-link" rel="manifest" />
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-<meta name="theme-color" content="#0b1220" />
-
-<!-- <<<< THAY THẾ DÒNG SCRIPT MATHJAX CŨ BẰNG TOÀN BỘ KHỐI NÀY >>>> -->
-
-<!-- Cấu hình MathJax tối ưu -->
-<script>
-  window.MathJax = {
-    tex: {
-      // Yêu cầu sử dụng các gói 'ams' (cho toán nâng cao) và 'mhchem' (cho hóa học)
-      packages: {'[+]': ['ams', 'mhchem']}
-    }
-  };
-</script>
-
-<!-- Tải MathJax -->
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-<!-- <<<< KẾT THÚC KHỐI MATHJAX >>>> -->
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lưu Dấu Học Tập - Làm bài</title>
+    
+    <!-- ================= START: KHAI BÁO PWA & ICON HOÀN CHỈNH ================= -->
+    
+    <meta name="theme-color" content="#0b1220">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link id="manifest-link" rel="manifest"> 
+    
+    <!-- ================== END: KHAI BÁO PWA & ICON HOÀN CHỈNH ================== -->
+    
+    <!-- Liên kết CSS của trang làm bài -->
+    <link rel="stylesheet" href="css/styleD.css">
+    
+    <!-- Các thẻ link/script khác của trang làm bài (ví dụ: MathJax, SortableJS) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script>
+      window.MathJax = { tex: { packages: {'[+]': ['ams', 'mhchem']} } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
  <!-- ============================================== -->

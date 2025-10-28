@@ -5,10 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lưu Dấu Học Tập - Cổng Luyện tập</title>
     
-    <!-- SỬA LẠI: Liên kết đến file CSS chung của dự án -->
-    <link rel="stylesheet" href="css/styleHome.css">
-    <link id="manifest-link" rel="manifest" />
+    <!-- ================= START: KHAI BÁO PWA & ICON HOÀN CHỈNH ================= -->
+    
+    <!-- 1. Màu sắc thanh địa chỉ trên trình duyệt di động -->
+    <meta name="theme-color" content="#0b1220">
+
+    <!-- 2. Các icon cho nhiều nền tảng (iOS, Android, Windows...) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
+    <!-- 3. Favicon.ico truyền thống (dành cho các tab trình duyệt và dự phòng) -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- 4. Khai báo Manifest Động (quan trọng nhất cho PWA) -->
+    <!-- JavaScript sẽ tìm thẻ này bằng ID và gán manifest "ảo" vào đây -->
+    <link id="manifest-link" rel="manifest"> 
+    
+    <!-- ================== END: KHAI BÁO PWA & ICON HOÀN CHỈNH ================== -->
+    
+    <!-- Liên kết CSS của trang chủ -->
+    <link rel="stylesheet" href="css/styleHome.css">
     <!-- Thêm một vài style riêng cho trang chủ -->
     <style>
         .welcome-section { 
