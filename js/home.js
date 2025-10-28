@@ -1,9 +1,7 @@
-// /js/home.js - PHIÊN BẢN CUỐI CÙNG (Thêm chức năng phím Enter)
+// /js/home.js - PHIÊN BẢN HOÀN CHỈNH, TỐI ƯU HÓA
 
 /**
- * Hàm tạo PWA Manifest động.
- * Nó tạo ra một manifest "ảo" với start_url chứa mã lớp,
- * đảm bảo ứng dụng PWA khi mở sẽ vào đúng lớp của học sinh.
+ * Hàm tạo PWA Manifest động. Đảm bảo ứng dụng PWA khi mở sẽ vào đúng lớp của học sinh.
  * @param {string} classCode - Mã lớp để đưa vào start_url.
  */
 function generateDynamicManifest(classCode) {
@@ -11,7 +9,7 @@ function generateDynamicManifest(classCode) {
     const manifest = {
         "name": `LDHT - Lớp ${classCode}`,
         "short_name": `LDHT ${classCode}`,
-        "start_url": `/Index.html?lop=${classCode}`,
+        "start_url": `/Index.html?lop=${classCode}`, // Đảm bảo đây là đường dẫn tương đối
         "display": "standalone",
         "background_color": "#0b1220",
         "theme_color": "#0b1220",
@@ -30,20 +28,18 @@ function generateDynamicManifest(classCode) {
     }
 }
 
+
 // Bắt đầu thực thi sau khi toàn bộ cấu trúc HTML đã được tải
 document.addEventListener('DOMContentLoaded', () => {
 
     // =================================================================
-    //      PHẦN 1: KHỞI TẠO CÁC BIẾN VÀ CẤU HÌNH
+    //      PHẦN 1: KHỞI TẠO BIẾN VÀ CẤU HÌNH
     // =================================================================
 
     function getClassCodeFromURL() {
         const params = new URLSearchParams(window.location.search);
         const classCode = params.get('lop') || params.get('class');
-        if (classCode) {
-            return classCode.replace(/[^a-zA-Z0-9]/g, '');
-        }
-        return null;
+        return classCode ? classCode.replace(/[^a-zA-Z0-9]/g, '') : null;
     }
 
     const classCode = getClassCodeFromURL();
@@ -86,105 +82,121 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         localStorage.setItem(STUDENT_INFO_KEY, JSON.stringify(studentInfo));
-        updateView(studentInfo);
+        // Sau khi lưu, chuyển sang chế độ xem nội dung
+        switchToContentView(studentInfo);
     }
 
     function logout() {
         if (confirm('Bạn có chắc chắn muốn xóa thông tin cá nhân trên trình duyệt này không?')) {
             localStorage.removeItem(STUDENT_INFO_KEY);
-            updateView(null);
+            // Sau khi xóa, chuyển về chế độ xem đăng nhập
+            switchToLoginView();
         }
     }
 
-    function updateView(studentInfo) {
-        if (studentInfo && studentInfo.name) {
-            loginContainer.classList.add('hidden');
-            contentContainer.classList.remove('hidden');
+    /**
+     * Chuyển giao diện sang trạng thái ĐĂNG NHẬP.
+     */
+    function switchToLoginView() {
+        contentContainer.classList.add('hidden');
+        loginContainer.classList.remove('hidden');
+        // Reset các ô input
+        studentNameInput.value = '';
+        studentIdInput.value = '';
+        classNameInput.value = '';
+        studentNameInput.focus(); // Tự động trỏ vào ô nhập tên
+    }
+
+    /**
+     * Chuyển giao diện sang trạng thái XEM NỘI DUNG.
+     * @param {object} studentInfo - Thông tin học sinh đã đăng nhập.
+     */
+    function switchToContentView(studentInfo) {
+        loginContainer.classList.add('hidden');
+        contentContainer.classList.remove('hidden');
+        
+        // Cập nhật lời chào
+        if (studentGreeting) {
             studentGreeting.innerHTML = `Xin chào, ${studentInfo.name}!`;
-            fetchAndDisplayExams();
-        } else {
-            loginContainer.classList.remove('hidden');
-            contentContainer.classList.add('hidden');
-            studentNameInput.value = '';
-            studentIdInput.value = '';
-            classNameInput.value = '';
-        }
-    }
-
-async function fetchAndDisplayExams() {
-    try {
-        // BƯỚC 1: Ẩn danh sách bài tập (nếu đang hiện) và HIỂN THỊ SPINNER
-        examListContainer.classList.add('hidden');
-        loadingContainer.classList.remove('hidden');
-        
-        // BƯỚC 2: GỌI API
-        const response = await fetch(`${API_URL}?action=getExamList`);
-        if (!response.ok) throw new Error('Không thể kết nối đến máy chủ.');
-        const result = await response.json();
-        if (!result.success) throw new Error(result.message);
-
-        const exams = result.data;
-        
-        // BƯỚC 3: Xử lý dữ liệu và chèn vào examListContainer (lúc này nó đang bị ẩn)
-        examListContainer.innerHTML = ''; // Luôn xóa nội dung cũ
-        if (exams.length === 0) {
-            examListContainer.innerHTML = '<p style="text-align: center;">Hiện chưa có bài tập nào được giao.</p>';
-        } else {
-            exams.forEach(exam => {
-                const link = document.createElement('a');
-                link.className = 'exam-link';
-                link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
-                link.innerHTML = `<h3>${exam.title}</h3><p>Thời gian làm bài: ${exam.durationMinutes} phút</p>`;
-                examListContainer.appendChild(link);
-            });
         }
 
-        // BƯỚC 4: ẨN SPINNER và HIỂN THỊ DANH SÁCH BÀI TẬP
-        loadingContainer.classList.add('hidden');
-        examListContainer.classList.remove('hidden');
-
-    } catch (error) {
-        console.error("Lỗi khi tải danh sách bài tập:", error);
-        
-        // KHI CÓ LỖI: ẨN SPINNER và HIỂN THỊ THÔNG BÁO LỖI
-        loadingContainer.classList.add('hidden');
-        examListContainer.innerHTML = `<p style="text-align: center; color: var(--bad);">Lỗi: ${error.message}. Vui lòng thử tải lại trang.</p>`;
-        examListContainer.classList.remove('hidden'); // Hiển thị khu vực chứa lỗi
+        // Tải danh sách bài tập
+        fetchAndDisplayExams();
     }
-}
+
+    async function fetchAndDisplayExams() {
+        try {
+            examListContainer.classList.add('hidden');
+            loadingContainer.classList.remove('hidden');
+            
+            const response = await fetch(`${API_URL}?action=getExamList`);
+            if (!response.ok) throw new Error('Không thể kết nối đến máy chủ.');
+            const result = await response.json();
+            if (!result.success) throw new Error(result.message);
+            const exams = result.data;
+            
+            examListContainer.innerHTML = ''; 
+            if (exams.length === 0) {
+                examListContainer.innerHTML = '<p style="text-align: center;">Hiện chưa có bài tập nào được giao.</p>';
+            } else {
+                exams.forEach(exam => {
+                    const link = document.createElement('a');
+                    link.className = 'exam-link';
+                    link.href = `/Exam.html?examId=${exam.examId}&lop=${classCode}`;
+                    link.innerHTML = `<h3>${exam.title}</h3><p>Thời gian làm bài: ${exam.durationMinutes} phút</p>`;
+                    examListContainer.appendChild(link);
+                });
+            }
+
+            loadingContainer.classList.add('hidden');
+            examListContainer.classList.remove('hidden');
+
+        } catch (error) {
+            console.error("Lỗi khi tải danh sách bài tập:", error);
+            loadingContainer.classList.add('hidden');
+            examListContainer.innerHTML = `<p style="text-align: center; color: var(--bad);">Lỗi: ${error.message}. Vui lòng thử tải lại trang.</p>`;
+            examListContainer.classList.remove('hidden');
+        }
+    }
 
     // =================================================================
     //      PHẦN 3: KHỞI TẠO TRANG
     // =================================================================
 
     function initializePage() {
-        // Gắn sự kiện click cho các nút
+        // Gắn sự kiện click
         continueBtn.addEventListener('click', saveAndProceed);
         logoutBtn.addEventListener('click', logout);
 
-        // === START: THÊM CHỨC NĂNG PHÍM ENTER ===
+        // Gắn sự kiện phím Enter
         function handleEnterKey(event) {
             if (event.key === 'Enter') {
-                event.preventDefault(); // Ngăn hành vi mặc định (nếu có)
-                saveAndProceed(); // Gọi hàm xử lý như khi click nút
+                event.preventDefault();
+                saveAndProceed();
             }
         }
         studentNameInput.addEventListener('keydown', handleEnterKey);
         studentIdInput.addEventListener('keydown', handleEnterKey);
         classNameInput.addEventListener('keydown', handleEnterKey);
-        // === END: THÊM CHỨC NĂNG PHÍM ENTER ===
 
+        // Kiểm tra thông tin đã lưu
         const savedInfoRaw = localStorage.getItem(STUDENT_INFO_KEY);
-        let savedInfo = null;
         if (savedInfoRaw) {
             try {
-                savedInfo = JSON.parse(savedInfoRaw);
+                const savedInfo = JSON.parse(savedInfoRaw);
+                // Nếu có thông tin hợp lệ, chuyển thẳng vào xem nội dung
+                switchToContentView(savedInfo);
             } catch (e) {
                 localStorage.removeItem(STUDENT_INFO_KEY);
+                // Nếu thông tin lỗi, hiển thị màn hình đăng nhập
+                switchToLoginView();
             }
+        } else {
+            // Nếu chưa có thông tin, hiển thị màn hình đăng nhập
+            switchToLoginView();
         }
-        updateView(savedInfo);
     }
 
+    // Chạy hàm khởi tạo
     initializePage();
 });
