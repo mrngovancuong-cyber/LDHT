@@ -19,6 +19,13 @@
   to = "https://script.google.com/macros/s/AKfycbz50Pu2CkK3bQQIJD-nvlDN1hljmf4kwwLy5WzhhrNlV0f4GlUyYaRjA4oCEWNKOjhE/exec"
   status = 200
 
+# Quy tắc cho backend của Cô Thanh Nguyễn Đặng (mã lớp: cothanhnguyen)
+# Netlify sẽ kiểm tra quy tắc này TRƯỚC TIÊN.
+[[redirects]]
+  from = "/api/cotthanhnguyen/*"
+  to = "https://script.google.com/macros/s/AKfycbwyrvFwoFfNAVlffqx1_NCSXAh3AMHCERDDI0ukEqAOZoTK2QKUK6MuauU5TFwLw89tKQ/exec"
+  status = 200
+
 # (Trong tương lai, bạn sẽ thêm quy tắc cho các giáo viên khác ở đây)
 
 
