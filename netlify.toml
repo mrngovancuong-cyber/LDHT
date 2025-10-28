@@ -30,7 +30,7 @@
 # Netlify sẽ kiểm tra quy tắc này TRƯỚC TIÊN.
 [[redirects]]
   from = "/api/cokimngan/*"
-  to = "https://script.google.com/macros/s/AKfycbwyrvFwoFfNAVlffqx1_NCSXAh3AMHCERDDI0ukEqAOZoTK2QKUK6MuauU5TFwLw89tKQ/exec"
+  to = "https://script.google.com/macros/s/AKfycbz9X_dab7lQeoNhQC5JjBRN_a-pcaukXUXzuo2TIEZhEb3BHAjLYK6eRtwH7R3yr6lOtg/exec"
   status = 200
 
 # Quy tắc cho backend của Thầy Jack (mã lớp: thayjack)
