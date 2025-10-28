@@ -4,41 +4,6 @@
  * kèm theo mã lớp để giáo viên có thể truy cập nhanh.
  * @param {string} classCode - Mã lớp để đưa vào start_url.
  */
-function generateDynamicManifest(classCode) {
-    // Nếu không có mã lớp, không làm gì cả để tránh lỗi
-    if (!classCode) return;
-
-    // Tạo đối tượng manifest với các thông tin dành riêng cho Dashboard
-    const manifest = {
-        "name": `LDHT Dashboard - Lớp ${classCode}`, // Tên đầy đủ của ứng dụng
-        "short_name": `Dashboard ${classCode}`,      // Tên ngắn gọn hiển thị dưới icon
-        "start_url": `/Dashboard.html?lop=${classCode}`, // QUAN TRỌNG: Khởi động lại đúng trang Dashboard với mã lớp
-        "display": "standalone",
-        "background_color": "#1e1a17", // Màu nền của Dashboard (nâu-cà phê)
-        "theme_color": "#1e1a17",      // Màu thanh trạng thái trên di động
-        "scope": "/",                 // Phạm vi hoạt động của PWA là toàn bộ trang web
-        "icons": [
-            // Sử dụng chung bộ icon của dự án
-            { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" },
-            { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png" }
-        ]
-    };
-
-    // Chuyển đối tượng manifest thành một chuỗi JSON
-    const manifestString = JSON.stringify(manifest);
-    
-    // Tạo một "file ảo" trong bộ nhớ từ chuỗi JSON
-    const blob = new Blob([manifestString], { type: 'application/json' });
-    
-    // Tạo một URL duy nhất trỏ đến "file ảo" này
-    const manifestURL = URL.createObjectURL(blob);
-
-    // Tìm thẻ link manifest trong HTML và gán URL động vào
-    const manifestLink = document.getElementById('manifest-link');
-    if (manifestLink) {
-        manifestLink.href = manifestURL;
-    }
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- KHAI BÁO CÁC PHẦN TỬ DOM ---
@@ -97,13 +62,6 @@ if (!classCode) {
 }
 
 const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
-
-const params = new URLSearchParams(window.location.search);
-const pageClassCode = params.get('lop') || params.get('class');
-if (pageClassCode) {
-    // Gọi hàm đã định nghĩa ở trên với mã lớp tìm được
-    generateDynamicManifest(pageClassCode.replace(/[^a-zA-Z0-9]/g, ''));
-}
 
     // --- CÁC HÀM XỬ LÝ ---
 

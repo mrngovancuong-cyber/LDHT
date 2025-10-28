@@ -4,30 +4,6 @@
  * Hàm tạo PWA Manifest động. Đảm bảo ứng dụng PWA khi mở sẽ vào đúng lớp của học sinh.
  * @param {string} classCode - Mã lớp để đưa vào start_url.
  */
-function generateDynamicManifest(classCode) {
-    if (!classCode) return;
-    const manifest = {
-        "name": `LDHT - Lớp ${classCode}`,
-        "short_name": `LDHT ${classCode}`,
-        "start_url": `/Index.html?lop=${classCode}`, // Đảm bảo đây là đường dẫn tương đối
-        "display": "standalone",
-        "background_color": "#0b1220",
-        "theme_color": "#0b1220",
-        "scope": "/",
-        "icons": [
-            { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png" },
-            { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png" }
-        ]
-    };
-    const manifestString = JSON.stringify(manifest);
-    const blob = new Blob([manifestString], { type: 'application/json' });
-    const manifestURL = URL.createObjectURL(blob);
-    const manifestLink = document.getElementById('manifest-link');
-    if (manifestLink) {
-        manifestLink.href = manifestURL;
-    }
-}
-
 
 // Bắt đầu thực thi sau khi toàn bộ cấu trúc HTML đã được tải
 document.addEventListener('DOMContentLoaded', () => {
@@ -54,8 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const API_URL = `/api/${classCode}/`;
     const STUDENT_INFO_KEY = `ldht-student-info-${classCode}`;
-    generateDynamicManifest(classCode);
-
+    
     const loginContainer = document.getElementById('login-container');
     const contentContainer = document.getElementById('content-container');
     const studentNameInput = document.getElementById('studentName');
