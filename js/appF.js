@@ -1016,6 +1016,17 @@ if (isCorrect) {
 }
         });
     }
+
+// =========================================================
+// === DÁN ĐOẠN CODE GỌI LẠI MATHJAX VÀO NGAY ĐÂY ===
+// =========================================================
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            console.log("Gọi lại MathJax để render đáp án và giải thích...");
+            window.MathJax.typesetPromise()
+                .then(() => console.log("MathJax đã render xong nội dung mới."))
+                .catch((err) => console.error('Lỗi khi render lại MathJax:', err));
+        }
+// =========================================================
     
   } catch (error) {
     console.error('Lỗi khi nộp bài:', error);
