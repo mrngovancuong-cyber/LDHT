@@ -954,18 +954,30 @@ async function submitExam(auto = false) {
         break;
     }
     case 'matching': {
-        // Logic mới: Sắp xếp các cặp chỉ số rồi so sánh
+        // Chuẩn hóa bằng cách xóa khoảng trắng, sắp xếp các cặp, rồi so sánh
         const normalize = (str) => (str || "").replace(/\s/g, '').split(',').sort().join(',');
         if (normalize(studentAnswer) === normalize(qData.correct)) {
             isCorrect = true;
         }
         break;
     }
-    case 'ordering':
+    case 'ordering': {
+        // =========================================================
+        // === SỬA LỖI CHÍNH NẰM Ở ĐÂY ===
+        // Chuẩn hóa bằng cách xóa tất cả các ký tự không phải chữ và số
+        // rồi so sánh. "AlMgNaK" sẽ luôn bằng "AlMgNaK".
+        const normalize = (str) => (str || "").replace(/[^a-zA-Z0-9]/g, '');
+        
+        if (normalize(studentAnswer) === normalize(qData.correct)) {
+            isCorrect = true;
+        }
+        // =========================================================
+        break;
+    }
     case 'multiple_choice':
     default: {
-        // Logic mới: So sánh trực tiếp chuỗi nội dung
-        if (studentAnswer.trim() === qData.correct.trim()) {
+        // So sánh đơn giản cho trắc nghiệm vẫn ổn
+        if (studentAnswer === qData.correct) {
             isCorrect = true;
         }
         break;
