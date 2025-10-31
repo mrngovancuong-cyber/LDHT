@@ -986,12 +986,13 @@ async function submitExam(auto = false) {
             }
             // ===== KẾT THÚC PHẦN BỔ SUNG =====
 
-            let friendlyCorrectAnswer = '';
+const correctAnswerString = String(qData.correct || '');
+let friendlyCorrectAnswer = '';
 
 switch (questionType) {
     case 'matching': {
-        if (qData.correct && Array.isArray(qData.options)) {
-            friendlyCorrectAnswer = qData.correct.split(',')
+        if (correctAnswerString && Array.isArray(qData.options)) {
+            friendlyCorrectAnswer = correctAnswerString.split(',')
                 .map(pair => {
                     const [aIndexStr, bIndexStr] = pair.split('-');
                     const aIndex = parseInt(aIndexStr, 10), bIndex = parseInt(bIndexStr, 10);
@@ -1000,19 +1001,20 @@ switch (questionType) {
                     if (letterA && contentB) return `${letterA} - ${contentB}`;
                     return pair;
                 }).join('; ');
-        } else { friendlyCorrectAnswer = qData.correct; }
+        } else { friendlyCorrectAnswer = correctAnswerString; }
         break;
     }
     case 'ordering':
-        friendlyCorrectAnswer = qData.correct.split('||').join(' → ');
+        friendlyCorrectAnswer = correctAnswerString.split('||').join(' → ');
         break;
     case 'fill_blank':
-        friendlyCorrectAnswer = qData.correct.split('|').join(' hoặc ');
+        friendlyCorrectAnswer = correctAnswerString.split('|').join(' hoặc ');
         break;
     default:
-        friendlyCorrectAnswer = qData.correct;
+        friendlyCorrectAnswer = correctAnswerString;
         break;
 }
+
 
 if (isCorrect) {
     exp.innerHTML = `<strong>Đúng!</strong> ${escapeHtml(qData.explain)}`;
