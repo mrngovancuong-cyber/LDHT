@@ -61,6 +61,13 @@
   to = "https://script.google.com/macros/s/AKfycbxO4rhmNfWEZXTmt1YnV3791v1em7m23smOKvPVfJsDGsFQD87nJgZijIgmEMo1Sr2ehg/exec"
   status = 200
 
+# Quy tắc cho backend của Cô Bình Minh (mã lớp: cobinhminh)
+# Netlify sẽ kiểm tra quy tắc này TRƯỚC TIÊN.
+[[redirects]]
+  from = "/api/cobinhminh/*"
+  to = "https://script.google.com/macros/s/AKfycbyyfkgmFmsNBF2a7SrEEDANBCQxP19b6ypvqAJGdQX7_oTD9qVcr9mdDOGFGmh_OOuB/exec"
+  status = 200
+
 
 # (Trong tương lai, bạn sẽ thêm quy tắc cho các giáo viên khác ở đây)
 
