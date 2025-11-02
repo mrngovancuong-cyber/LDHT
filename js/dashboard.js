@@ -224,7 +224,8 @@ function handleTabClick(event) {
 }
 
 /**
- * Điền dữ liệu vào bảng Lịch sử làm bài
+ * Điền dữ liệu vào bảng Lịch sử làm bài.
+ * PHIÊN BẢN GIA CỐ: Xử lý an toàn các trường hợp dữ liệu bị thiếu.
  * @param {Array} historyData - Mảng dữ liệu lịch sử từ API
  */
 function renderHistoryTable(historyData) {
@@ -236,25 +237,41 @@ function renderHistoryTable(historyData) {
     }
 
     historyData.forEach((item, index) => {
+        // === BẮT ĐẦU PHẦN SỬA LỖI ===
+
+        // Kiểm tra an toàn cho điểm số. Nếu không có hoặc không phải là số, hiển thị 'N/A'.
+        const scoreDisplay = (typeof item.score === 'number') 
+            ? item.score.toFixed(2) 
+            : 'N/A'; // N/A = Not Available (Không có sẵn)
+
+        // Kiểm tra an toàn cho các giá trị khác (đề phòng)
+        const examTitleDisplay = item.examTitle || 'Không có tên';
+        const timeSpentDisplay = item.timeSpent || 'N/A';
+        const leaveCountDisplay = item.leaveCount ?? 'N/A'; // Dùng ?? để xử lý cả trường hợp số 0
+        const submittedAtDisplay = item.submittedAt || 'N/A';
+        
+        // === KẾT THÚC PHẦN SỬA LỖI ===
+        
         const row = document.createElement('tr');
-        // Thêm một cột mới cho nút "Hành động"
+        // Sử dụng các biến đã được kiểm tra an toàn
         row.innerHTML = `
-            <td>${item.examTitle}</td>
-            <td>${item.score.toFixed(2)}</td>
-            <td>${item.timeSpent}</td>
-            <td>${item.leaveCount}</td>
-            <td>${item.submittedAt}</td>
+            <td>${examTitleDisplay}</td>
+            <td>${scoreDisplay}</td>
+            <td>${timeSpentDisplay}</td>
+            <td>${leaveCountDisplay}</td>
+            <td>${submittedAtDisplay}</td>
             <td><button class="action-btn-small" data-index="${index}">Xem chi tiết</button></td>
         `;
         historyTableBody.appendChild(row);
     });
 
-    // Gắn sự kiện cho các nút "Xem chi tiết" vừa được tạo
+    // Gắn sự kiện cho các nút "Xem chi tiết"
     document.querySelectorAll('.action-btn-small').forEach(button => {
         button.addEventListener('click', (event) => {
             const itemIndex = event.target.dataset.index;
-            const behaviorData = historyData[itemIndex];
-            showBehaviorModal(behaviorData);
+            if (historyData[itemIndex]) { // Kiểm tra an toàn trước khi hiển thị modal
+                showBehaviorModal(historyData[itemIndex]);
+            }
         });
     });
 }
