@@ -75,6 +75,14 @@
   to = "https://script.google.com/macros/s/AKfycbzXWJdvgZmb31eer6rSFVwfZpn8xuVimyM3DHZPwp6YAP5bP90Y8u6PMdCLFstTIWMV/exec"
   status = 200
 
+# Quy tắc cho backend của Thầy Kiên Chu (mã lớp: thaykienchu)
+# Netlify sẽ kiểm tra quy tắc này TRƯỚC TIÊN.
+[[redirects]]
+  from = "/api/thaykienchu/*"
+  to = "https://script.google.com/macros/s/AKfycbwONy8uuOxr5qTqJ2wr4nVWZKmASzAAK33eaXjEWulN6lE0Bo0Px8HmENQw2q4_IR4i/exec"
+  status = 200
+
+
 # (Trong tương lai, bạn sẽ thêm quy tắc cho các giáo viên khác ở đây)
 
 # ===================================================================
