@@ -17,6 +17,7 @@
   --accent: #10b981;
   --ok: #22c55e;
   --bad: #ef4444;
+  --timer-color: #facc15; /* Màu vàng cho nền tối */
 }
 
 /* Chế độ Sáng - PHIÊN BẢN NÂNG CẤP */
@@ -35,6 +36,7 @@
   --accent: #059669;
   --ok: #16a34a;
   --bad: #dc2626;
+  --timer-color: #c2410c; /* Màu cam cháy cho nền sáng */
 }
 
 /* ------------------------------
@@ -252,7 +254,7 @@ main {
 .q-card:focus-within { box-shadow: 0 0 0 3px rgba(37,99,235,0.25); outline: none; }
 
 .q-head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-.q-head .q-title { font-weight: 700; font-size: 16px; line-height: 1.4; color: #e2e8f0; }
+.q-head .q-title { font-weight: 700; font-size: 16px; line-height: 1.4; color: var(--muted); }
 .q-head .q-meta { font-size: 12px; color: var(--muted); }
 
 .answers { display: grid; gap: 6px; margin: 8px 0; }
@@ -525,7 +527,7 @@ kbd {
   justify-self: end; /* Căn sát lề phải của cột */
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  color: var(--text);
+  color: var(--timer-color);
 }
 
 /* --- 4. Tạo kiểu cho link "Lưu Dấu Học Tập" ở Header Top --- */
@@ -787,4 +789,17 @@ kbd {
 
 .answer span {
     color: var(--text);
+}
+
+/* Ẩn logo cho theme sáng theo mặc định (vì mặc định là theme tối) */
+.logo-light-theme {
+    display: none;
+}
+
+/* Khi ở theme sáng, ẩn logo theme tối và hiện logo theme sáng */
+[data-theme="light"] .logo-dark-theme {
+    display: none;
+}
+[data-theme="light"] .logo-light-theme {
+    display: block; /* Hoặc inline, tùy thuộc vào layout của bạn */
 }

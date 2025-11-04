@@ -311,3 +311,16 @@ main {
     justify-content: center;
     align-items: center;
 }
+
+/* Ẩn logo cho theme sáng theo mặc định (vì mặc định là theme tối) */
+.logo-light-theme {
+    display: none;
+}
+
+/* Khi ở theme sáng, ẩn logo theme tối và hiện logo theme sáng */
+[data-theme="light"] .logo-dark-theme {
+    display: none;
+}
+[data-theme="light"] .logo-light-theme {
+    display: block; /* Hoặc inline, tùy thuộc vào layout của bạn */
+}
