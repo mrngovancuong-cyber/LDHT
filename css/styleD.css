@@ -15,6 +15,8 @@
   --muted: #9aa5b1;
   --primary: #2563eb;
   --accent: #10b981;
+  --text-muted: #9aa5b1; /* Màu xám nhạt (như cũ) */
+  --bg-explain: rgba(31, 42, 68, 0.3); /* Xanh đậm trong suốt */
   --ok: #22c55e;
   --bad: #ef4444;
   --timer-color: #facc15; /* Màu vàng cho nền tối */
@@ -34,6 +36,8 @@
   --muted: #075985;
   --primary: #0ea5e9;
   --accent: #059669;
+  --text-muted: #075985; /* Xanh đậm (giống màu chữ câu hỏi) */
+  --bg-explain: #e0f2fe; /* Xanh da trời rất nhạt (giống nền ô input) */
   --ok: #16a34a;
   --bad: #dc2626;
   --timer-color: #b91c1c; /* Màu đỏ đậm, rất nổi bật */
@@ -272,8 +276,31 @@ main {
 .q-card.correct { border-color: var(--ok); background: rgba(34,197,94,0.08); }
 .q-card.incorrect { border-color: var(--bad); background: rgba(239,68,68,0.06); }
 
-.explain-block { margin-top: 8px; font-size: 14px; color: #cbd5e1; }
-.explain-block .explain { margin-top: 4px; opacity: 0.95; }
+/* === START: SỬA LỖI MÀU CHỮ PHẦN GIẢI THÍCH === */
+
+.explain-block {
+  margin-top: 1rem; /* Tăng khoảng cách một chút */
+  padding: 12px;
+  font-size: 14px;
+  color: var(--text-muted); /* <--- SỬA 1: Dùng biến màu cho chữ phụ */
+  background-color: var(--bg-explain); /* <--- SỬA 2: Thêm màu nền nhẹ */
+  border-radius: 8px;
+  border-left: 4px solid var(--border); /* Thêm một đường viền nhấn */
+}
+
+/* Kiểu dáng cho chữ "Đúng!", "Sai.", "Chưa trả lời." */
+.explain-block strong {
+    color: var(--text); /* Dùng màu chữ chính để làm nổi bật */
+}
+
+/* Kiểu dáng cho phần giải thích chi tiết */
+.explain-block .explain {
+  margin-top: 4px;
+  opacity: 0.95;
+  line-height: 1.5; /* Cải thiện khả năng đọc */
+}
+
+/* === END: SỬA LỖI MÀU CHỮ PHẦN GIẢI THÍCH === */
 
 /* ------------------------------
    Navigator
