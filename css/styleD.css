@@ -523,11 +523,17 @@ kbd {
 }
 
 .timer-container {
-  grid-column: 3 / 4; /* Đặt vào cột phải */
-  justify-self: end; /* Căn sát lề phải của cột */
+  grid-column: 3 / 4; 
+  justify-self: end; 
   font-variant-numeric: tabular-nums;
+  
+  /* Các thuộc tính được chuyển từ rule cũ lên */
   font-weight: 700;
-  color: var(--timer-color);
+  font-size: 24px;
+  text-shadow: 0 0 5px rgba(250, 204, 21, 0.3);
+
+  /* Dòng quan trọng nhất: Luôn dùng biến màu */
+  color: var(--timer-color); 
 }
 
 /* --- 4. Tạo kiểu cho link "Lưu Dấu Học Tập" ở Header Top --- */
@@ -578,20 +584,6 @@ kbd {
   color: #ffffff; /* Màu trắng */
 }
 
-
-/* --- 2. Đồng hồ bấm giờ (Hàng dưới, bên phải) --- */
-.timer-container {
-  /* Tăng kích thước font lên 1.5 lần so với font cơ bản (ví dụ 16px -> 24px) */
-  font-size: 24px;
-  font-weight: 700; /* Đảm bảo chữ luôn đậm */
-  
-  /* Đề xuất màu: Sử dụng màu vàng cảnh báo, rất nổi bật và phù hợp
-     với chức năng của một đồng hồ đếm ngược. */
-  color: #facc15; /* Đây là màu vàng mà bạn đã dùng cho #timeWarn */
-  
-  /* Thêm một chút hiệu ứng đổ bóng để làm chữ nổi khối hơn */
-  text-shadow: 0 0 5px rgba(250, 204, 21, 0.3);
-}
 
 /* --- 3. Cảnh báo thời gian (5 phút cuối) --- */
 /* Chúng ta cũng cần làm cho cảnh báo nổi bật hơn */
