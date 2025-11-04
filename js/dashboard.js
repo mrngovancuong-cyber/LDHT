@@ -172,7 +172,8 @@ const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
                 type: 'line',
                 height: 350,
                 foreColor: getChartForeColor(), // Màu chữ
-		zoom: { enabled: true }
+		zoom: { enabled: true },
+		fontFamily: "'Be Vietnam Pro', sans-serif" 
             },
             series: [{
                 name: 'Điểm số',
@@ -295,7 +296,7 @@ function renderHistoryTable(historyData) {
  */
 function renderTopicStrengthChart(topicData) {
     const options = {
-        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
+        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, fontFamily: "'Be Vietnam Pro', sans-serif" },
         series: [{ name: 'Tỷ lệ đúng', data: topicData.map(item => (item.accuracy * 100).toFixed(1)) }],
         xaxis: { categories: topicData.map(item => item.topic) },
         yaxis: { min: 0, max: 100, labels: { formatter: (val) => `${val}%` } },
@@ -318,7 +319,7 @@ function renderLevelStrengthChart(levelData) {
     levelData.sort((a, b) => levelOrder.indexOf(a.level) - levelOrder.indexOf(b.level));
 
     const options = {
-        chart: { type: 'radar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
+        chart: { type: 'radar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, fontFamily: "'Be Vietnam Pro', sans-serif" },
         series: [{ name: 'Tỷ lệ đúng', data: levelData.map(item => (item.accuracy * 100).toFixed(1)) }],
         labels: levelData.map(item => item.level),
         yaxis: { min: 0, max: 100, labels: { formatter: (val) => `${val}%` } },
@@ -338,7 +339,7 @@ function renderLevelStrengthChart(levelData) {
  */
 function renderLeaveCountChart(leaveData) {
     const options = {
-        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
+        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, fontFamily: "'Be Vietnam Pro', sans-serif" },
         series: [{ name: 'Số lần rời trang', data: leaveData.map(item => item.count) }],
         xaxis: { categories: leaveData.map(item => item.examTitle) },
         yaxis: { labels: { formatter: (val) => Math.round(val) } }, // Chỉ hiển thị số nguyên
@@ -356,7 +357,7 @@ function renderLeaveCountChart(leaveData) {
  */
 function renderDeviceUsageChart(deviceData) {
     const options = {
-        chart: { type: 'donut', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, toolbar: { show: true } },
+        chart: { type: 'donut', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, toolbar: { show: true }, fontFamily: "'Be Vietnam Pro', sans-serif" },
         series: deviceData.map(item => item.count),
         labels: deviceData.map(item => item.device),
         title: { text: 'Thói quen sử dụng thiết bị', align: 'left', style: { fontSize: '18px', color: getChartForeColor() } },
@@ -395,7 +396,7 @@ function showBehaviorModal(data) {
  */
 function renderStudyTimeChart(timeData) {
     const options = {
-        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
+        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, fontFamily: "'Be Vietnam Pro', sans-serif" },
         series: [{ name: 'Số bài làm', data: timeData.map(item => item.count) }],
         xaxis: { categories: timeData.map(item => item.timeSlot) },
         yaxis: { labels: { formatter: (val) => Math.round(val) } },
@@ -473,7 +474,7 @@ function renderBehaviorWarnings(warningData) {
  */
 function renderPerformanceQuadrantChart(quadrantData) {
     const options = {
-        chart: { type: 'scatter', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
+        chart: { type: 'scatter', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, fontFamily: "'Be Vietnam Pro', sans-serif" },
         series: [{ name: "Bài làm", data: quadrantData.map(item => [item.x, item.y]) }],
         xaxis: {
             tickAmount: 10,

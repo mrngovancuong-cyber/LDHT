@@ -417,18 +417,32 @@ body {
     outline-offset: 4px;
 }
 
-/* Tạo kiểu cho icon mặt trăng/mặt trời */
+/* Tạo kiểu cho icon mặt trăng/mặt trời - PHIÊN BẢN KHÔNG NỀN */
 .theme-icon {
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* Tăng kích thước icon lên một chút cho dễ nhìn */
     color: var(--text);
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    
+    /* XÓA BỎ CÁC DÒNG GÂY RA NỀN VÀ VIỀN */
+    /* background-color: var(--bg-card); */
+    /* border: 1px solid var(--border); */
+
+    /* GIỮ NGUYÊN CÁC DÒNG CĂN CHỈNH */
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* CÁC THAY ĐỔI NHỎ ĐỂ GIỮ KÍCH THƯỚC (NẾU CẦN) */
+    /* Nếu bạn vẫn muốn icon chiếm một không gian tròn cố định, giữ lại các dòng này */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Giữ lại để vùng bấm vẫn là hình tròn */
+    transition: transform 0.2s ease-in-out; /* Thêm hiệu ứng xoay nhẹ */
+}
+
+/* Thêm hiệu ứng khi hover để người dùng biết đây là một nút bấm */
+.theme-icon:hover {
+    transform: scale(1.1) rotate(15deg);
+}
 }
 
 /* Ẩn logo cho theme sáng theo mặc định (vì mặc định là theme tối) */
