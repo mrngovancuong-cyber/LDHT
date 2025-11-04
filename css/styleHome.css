@@ -298,18 +298,28 @@ main {
     outline-offset: 4px;
 }
 
-/* Tạo kiểu cho icon mặt trăng/mặt trời */
+//* Tạo kiểu cho icon mặt trăng/mặt trời - PHIÊN BẢN TINH CHỈNH */
 .theme-icon {
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* Tăng kích thước icon */
     color: var(--text);
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 50%;
+    
+    /* Bỏ nền và viền */
+    background-color: transparent;
+    border: none;
+
+    /* Giữ lại các thuộc tính để căn giữa */
     width: 40px;
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Thêm hiệu ứng xoay nhẹ khi hover lên toàn bộ cụm */
+.theme-toggle-cluster:hover .theme-icon {
+    transform: rotate(20deg);
 }
 
 /* Ẩn logo cho theme sáng theo mặc định (vì mặc định là theme tối) */
