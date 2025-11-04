@@ -23,9 +23,9 @@
 /* Chế độ Sáng */
 [data-theme="light"] {
   --bg: #fefbf6;
-  --bg-elev: #fdf6ec;
+  --bg-elev: #fae8d3;
   --bg-card: #ffffff;
-  --border: #fae8d3;
+  --border: #f5d7b5;
   --text: #431407;      /* Nâu socola đậm hơn */
   --muted: #9a3412;     /* Cam cháy */
   --primary: #7c3aed;

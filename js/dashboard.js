@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const behaviorWarningCard = document.getElementById('behavior-warning-card');
     const behaviorWarningContent = document.getElementById('behavior-warning-content');
     const performanceQuadrantChartContainer = document.getElementById('performance-quadrant-chart');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn'); // <-- THÊM DÒNG NÀY
     // Khai báo các biến để giữ đối tượng biểu đồ    
     let performanceQuadrantChart = null;
     let topicStrengthChart = null;
@@ -36,10 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let leaveCountChart = null;
     let deviceUsageChart = null;
     let studyTimeChart = null;
+    let currentStudentData = null; // Lưu dữ liệu học sinh hiện tại
 
     // Khởi tạo biểu đồ, nhưng chưa có dữ liệu
     let scoreTrendChart = null;
-
+/**
+ * Lấy màu chữ phù hợp cho biểu đồ dựa trên theme hiện tại.
+ * @returns {string} Mã màu hex.
+ */
+function getChartForeColor() {
+  // Kiểm tra xem thẻ <html> có thuộc tính data-theme="light" không
+  if (document.documentElement.getAttribute('data-theme') === 'light') {
+    return '#431407'; // Màu chữ đậm của Chế độ Sáng
+  }
+  return '#f3e9e0'; // Màu chữ sáng của Chế độ Tối (mặc định)
+}
     // --- API URL ---
     // ===== START: API URL Động cho Multi-Tenant =====
 function getClassCodeFromURL() {
@@ -118,7 +130,8 @@ const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
      * @param {object} data - Dữ liệu phân tích từ API
      */
     function renderData(data) {
-        if (!data || !data.profile) {
+        currentStudentData = data; // <-- THÊM DÒNG NÀY
+	if (!data || !data.profile) {
             alert("Dữ liệu trả về không hợp lệ.");
             return;
         }
@@ -158,7 +171,7 @@ const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
             chart: {
                 type: 'line',
                 height: 350,
-                foreColor: '#e5e7eb', // Màu chữ
+                foreColor: getChartForeColor(), // Màu chữ
 		zoom: { enabled: true }
             },
             series: [{
@@ -180,7 +193,7 @@ const API_URL = classCode ? `/api/${classCode}/` : "/api/default/";
                 align: 'left',
                 style: {
                     fontSize: '18px',
-                    color: '#f3e9e0' // Màu text tiêu đề
+                    color: getChartForeColor() // Màu text tiêu đề
                 }
             },
             grid: {
@@ -282,12 +295,12 @@ function renderHistoryTable(historyData) {
  */
 function renderTopicStrengthChart(topicData) {
     const options = {
-        chart: { type: 'bar', height: 350, foreColor: '#e5e7eb', zoom: { enabled: true } },
+        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
         series: [{ name: 'Tỷ lệ đúng', data: topicData.map(item => (item.accuracy * 100).toFixed(1)) }],
         xaxis: { categories: topicData.map(item => item.topic) },
         yaxis: { min: 0, max: 100, labels: { formatter: (val) => `${val}%` } },
         plotOptions: { bar: { horizontal: true } }, // Biểu đồ cột ngang dễ đọc hơn khi có nhiều chủ đề
-        title: { text: 'Độ vững kiến thức theo Chủ đề', align: 'left', style: { fontSize: '18px', color: '#f3e9e0' } },
+        title: { text: 'Độ vững kiến thức theo Chủ đề', align: 'left', style: { fontSize: '18px', color: getChartForeColor() } },
         grid: { borderColor: '#374151' },
         tooltip: { theme: 'dark', y: { formatter: (val) => `${val}%` } }
     };
@@ -305,11 +318,11 @@ function renderLevelStrengthChart(levelData) {
     levelData.sort((a, b) => levelOrder.indexOf(a.level) - levelOrder.indexOf(b.level));
 
     const options = {
-        chart: { type: 'radar', height: 350, foreColor: '#e5e7eb', zoom: { enabled: true } },
+        chart: { type: 'radar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
         series: [{ name: 'Tỷ lệ đúng', data: levelData.map(item => (item.accuracy * 100).toFixed(1)) }],
         labels: levelData.map(item => item.level),
         yaxis: { min: 0, max: 100, labels: { formatter: (val) => `${val}%` } },
-        title: { text: 'Năng lực tư duy theo Cấp độ', align: 'left', style: { fontSize: '18px', color: '#f3e9e0' } },
+        title: { text: 'Năng lực tư duy theo Cấp độ', align: 'left', style: { fontSize: '18px', color: getChartForeColor() } },
         stroke: { width: 2 },
         fill: { opacity: 0.1 },
         markers: { size: 4 },
@@ -325,11 +338,11 @@ function renderLevelStrengthChart(levelData) {
  */
 function renderLeaveCountChart(leaveData) {
     const options = {
-        chart: { type: 'bar', height: 350, foreColor: '#e5e7eb', zoom: { enabled: true } },
+        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
         series: [{ name: 'Số lần rời trang', data: leaveData.map(item => item.count) }],
         xaxis: { categories: leaveData.map(item => item.examTitle) },
         yaxis: { labels: { formatter: (val) => Math.round(val) } }, // Chỉ hiển thị số nguyên
-        title: { text: 'Mức độ tập trung (Số lần rời trang)', align: 'left', style: { fontSize: '18px', color: '#f3e9e0' } },
+        title: { text: 'Mức độ tập trung (Số lần rời trang)', align: 'left', style: { fontSize: '18px', color: getChartForeColor() } },
         grid: { borderColor: '#374151' },
         tooltip: { theme: 'dark' }
     };
@@ -343,10 +356,10 @@ function renderLeaveCountChart(leaveData) {
  */
 function renderDeviceUsageChart(deviceData) {
     const options = {
-        chart: { type: 'donut', height: 350, foreColor: '#e5e7eb', zoom: { enabled: true }, toolbar: { show: true } },
+        chart: { type: 'donut', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true }, toolbar: { show: true } },
         series: deviceData.map(item => item.count),
         labels: deviceData.map(item => item.device),
-        title: { text: 'Thói quen sử dụng thiết bị', align: 'left', style: { fontSize: '18px', color: '#f3e9e0' } },
+        title: { text: 'Thói quen sử dụng thiết bị', align: 'left', style: { fontSize: '18px', color: getChartForeColor() } },
         legend: { position: 'bottom' },
         tooltip: { theme: 'dark', y: { formatter: (val) => `${val} lần` } }
     };
@@ -382,7 +395,7 @@ function showBehaviorModal(data) {
  */
 function renderStudyTimeChart(timeData) {
     const options = {
-        chart: { type: 'bar', height: 350, foreColor: '#e5e7eb', zoom: { enabled: true } },
+        chart: { type: 'bar', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
         series: [{ name: 'Số bài làm', data: timeData.map(item => item.count) }],
         xaxis: { categories: timeData.map(item => item.timeSlot) },
         yaxis: { labels: { formatter: (val) => Math.round(val) } },
@@ -403,7 +416,7 @@ function renderStudyTimeChart(timeData) {
             '#ef4444'  // 22-24h (Đêm) - Đỏ cảnh báo
         ],
         legend: { show: false }, // Ẩn chú thích vì đã dùng màu distributed
-        title: { text: 'Phân bố Thời gian làm bài trong ngày', align: 'left', style: { fontSize: '18px', color: '#f3e9e0' } },
+        title: { text: 'Phân bố Thời gian làm bài trong ngày', align: 'left', style: { fontSize: '18px', color: getChartForeColor() } },
         grid: { borderColor: '#374151' },
         tooltip: { theme: 'dark' }
     };
@@ -460,7 +473,7 @@ function renderBehaviorWarnings(warningData) {
  */
 function renderPerformanceQuadrantChart(quadrantData) {
     const options = {
-        chart: { type: 'scatter', height: 350, foreColor: '#e5e7eb', zoom: { enabled: true } },
+        chart: { type: 'scatter', height: 350, foreColor: getChartForeColor(), zoom: { enabled: true } },
         series: [{ name: "Bài làm", data: quadrantData.map(item => [item.x, item.y]) }],
         xaxis: {
             tickAmount: 10,
@@ -473,7 +486,7 @@ function renderPerformanceQuadrantChart(quadrantData) {
             max: 10,
             title: { text: 'Điểm số' }
         },
-        title: { text: 'Phân tích Phong cách làm bài', align: 'left', style: { fontSize: '18px', color: '#f3e9e0' } },
+        title: { text: 'Phân tích Phong cách làm bài', align: 'left', style: { fontSize: '18px', color: getChartForeColor() } },
         grid: { borderColor: '#374151' },
         tooltip: {
             theme: 'dark',
@@ -523,4 +536,18 @@ behaviorModal.addEventListener('click', (event) => {
         behaviorModal.classList.add('hidden');
     }
 });
+// Gắn sự kiện click vào nút chuyển theme
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        // Chờ một chút để theme-switcher.js kịp đổi theme
+        // (10ms là đủ)
+        setTimeout(() => {
+            // Nếu đang có dữ liệu của một học sinh, hãy vẽ lại tất cả
+            if (currentStudentData) {
+                console.log("Theme changed, re-rendering charts...");
+                renderData(currentStudentData);
+            }
+        }, 10); 
+    });
+}
 });
