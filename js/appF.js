@@ -1173,10 +1173,15 @@ $('#btn-clear')?.addEventListener('click', ()=>{
   });
 }
 
-function escapeHtml(str){
-  if (typeof str !== 'string') return '';
-  const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
-  return str.replace(/[&<>"']/g, (m) => map[m]);
+// HÀM escapeHtml PHIÊN BẢN MỚI
+function escapeHtml(str) {
+  
+  const inputString = String(str || ''); // Chuyển đổi mọi thứ thành chuỗi trước khi xử lý
+
+  if (inputString === '') return ''; // Trả về chuỗi rỗng nếu không có gì
+
+  const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;'};
+  return inputString.replace(/[&<>"']/g, (m) => map[m]);
 }
 
 // Dán hàm này vào gần cuối file appF.js
