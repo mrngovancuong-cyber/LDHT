@@ -16,6 +16,8 @@
   --muted: #9aa5b1;
   --primary: #2563eb;
   --accent: #10b981;
+  --bg-input: #0f172a; /* Nền tối cho ô input */
+  --text-prompt: #e5e7eb; /* Màu trắng ngà cho chữ hướng dẫn */
   --ok: #22c55e;
   --bad: #ef4444;
 }
@@ -33,6 +35,8 @@
   --muted: #075985;
   --primary: #0ea5e9;
   --accent: #059669;
+  --bg-input: #e0f2fe;    /* Xanh da trời rất nhạt */
+  --text-prompt: #083344; /* Xanh đậm cho chữ hướng dẫn */
   --ok: #16a34a;
   --bad: #dc2626;
 }
@@ -193,12 +197,29 @@ main {
   color: var(--muted);
 }
 
-/* === START: STYLES FOR FINAL HOMEPAGE UX === */
+/* === START: STYLES FOR FINAL HOMEPAGE UX (v2) === */
+
+/* ----- Kiểu dáng chung cho Form Đăng nhập ----- */
+#login-container h2 {
+    text-align: center; color: var(--accent); margin-top: 0; 
+    margin-bottom: 1rem; font-size: 2rem;
+}
+
+.login-prompt { /* <--- Kiểu dáng mới cho dòng chữ hướng dẫn */
+    text-align: center; font-size: 1.25rem; font-weight: bold; 
+    color: var(--text-prompt); /* <--- Sử dụng biến màu mới */
+    margin-bottom: 2.5rem; opacity: 0.9;
+}
 
 .form-field {
-  width: 100%; padding: 12px; font-size: 1rem; border: 1px solid var(--border);
-  border-radius: 8px; background: #0b1324; color: var(--text);
+  width: 100%; 
+  padding: 15px; /* <--- Tăng padding */
+  font-size: 1.1rem; /* <--- Tăng font-size */
+  border: 1px solid var(--border);
+  border-radius: 8px; 
+  color: var(--text);
   transition: all 0.2s ease-in-out;
+  background-color: var(--bg-input); /* <--- Sử dụng biến màu mới */
 }
 .form-field::placeholder { color: var(--muted); }
 .form-field:focus {
@@ -206,10 +227,17 @@ main {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
-.form-group { margin-bottom: 1rem; }
-.grid { display: grid; gap: 12px; }
-.grid.two { grid-template-columns: 1fr 1fr; }
+#continue-btn { /* <--- Kiểu dáng mới cho nút Tiếp tục */
+    padding: 14px 50px; font-size: 1.2rem; border-radius: 50px; 
+    font-weight: bold; letter-spacing: 0.5px; 
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
 
+.form-group { margin-bottom: 1rem; }
+.grid { display: grid; }
+.grid.two { grid-template-columns: 1fr 1fr; gap: 20px;}
+
+/* ----- Kiểu dáng chung cho Trang đã đăng nhập ----- */
 .action-btn {
   padding: 10px 16px; border-radius: 8px; font-size: 15px;
   font-weight: 600; cursor: pointer; border: none;
@@ -219,20 +247,14 @@ main {
 .btn-start { background:#3b82f6; color:#fff; }
 .btn-start:hover { background:#2563eb; }
 .btn-clear { 
-  background: transparent; 
-  border: 1px solid var(--border);
-  color: var(--muted); 
-  font-size: 13px; 
-  padding: 6px 10px; 
-  margin-top: 10px; /* Tạo khoảng cách với lời chào */
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); font-size: 13px; padding: 6px 10px; 
+  margin-top: 10px;
 }
 .btn-clear:hover { background:#374151; color: var(--text); }
 
-
-/* Ghi đè style mặc định cho h2 trong welcome-section */
 .welcome-section h2 {
-    font-size: 1.5rem; /* Điều chỉnh kích thước font cho nhất quán */
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem; margin-bottom: 0.5rem;
 }
 
 .hidden { display: none !important; }
@@ -240,7 +262,7 @@ main {
 @media (max-width: 600px) {
     .grid.two { grid-template-columns: 1fr; }
 }
-/* === END: STYLES FOR FINAL HOMEPAGE UX === */
+/* === END: STYLES FOR FINAL HOMEPAGE UX (v2) === */
 
 /* === START: STYLES FOR LOADING SPINNER === */
 
