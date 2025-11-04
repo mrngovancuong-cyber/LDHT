@@ -320,7 +320,7 @@ main {
     outline-offset: 4px;
 }
 
-//* Tạo kiểu cho icon mặt trăng/mặt trời - PHIÊN BẢN TINH CHỈNH */
+/* Tạo kiểu cho icon mặt trăng/mặt trời - PHIÊN BẢN TINH CHỈNH */
 .theme-icon {
     font-size: 1.8rem; /* Tăng kích thước icon */
     color: var(--text);
