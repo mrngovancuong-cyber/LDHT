@@ -313,13 +313,13 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    border-radius: 50%; /* Giữ lại để vùng bấm vẫn là hình tròn */
     transition: transform 0.2s ease-in-out;
 }
 
-/* Thêm hiệu ứng xoay nhẹ khi hover lên toàn bộ cụm */
-.theme-toggle-cluster:hover .theme-icon {
-    transform: rotate(20deg);
+/* Thêm hiệu ứng khi hover để người dùng biết đây là một nút bấm */
+.theme-icon:hover {
+    transform: scale(1.1) rotate(15deg);
 }
 
 /* Ẩn logo cho theme sáng theo mặc định (vì mặc định là theme tối) */
