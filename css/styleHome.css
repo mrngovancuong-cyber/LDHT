@@ -26,8 +26,8 @@
   --bg-elev: #e0f2fe;
   --bg-card: #ffffff;
   --border: #bae6fd;
-  --text: #0c4a6e;
-  --muted: #38bdf8;
+  --text: #083344;      /* Xanh đen đậm hơn nữa */
+  --muted: #075985;     /* Xanh dương đậm hơn */
   --primary: #0ea5e9;
   --accent: #059669;
   --ok: #16a34a;
@@ -275,24 +275,36 @@ main {
 
 /* === END: STYLES FOR LOADING SPINNER === */
 
-/* === STYLES FOR THEME TOGGLE BUTTON === */
-.theme-toggle-btn {
+/* === STYLES FOR THEME TOGGLE CLUSTER (LOGO + ICON) === */
+.theme-toggle-cluster {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Khoảng cách giữa logo và icon */
     background-color: transparent;
-    border: 1px solid var(--border);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 8px; /* Bo góc để thấy vùng bấm khi focus */
+    transition: transform 0.2s ease;
+}
+.theme-toggle-cluster:hover {
+    transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+}
+.theme-toggle-cluster:focus-visible {
+    outline: 2px solid var(--primary); /* Viền focus để hỗ trợ trợ năng */
+    outline-offset: 4px;
+}
+
+/* Tạo kiểu cho icon mặt trăng/mặt trời */
+.theme-icon {
+    font-size: 1.5rem;
     color: var(--text);
-    padding: 8px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    font-size: 1.2rem;
-    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.2s ease;
-    margin-left: 1rem; /* Tạo khoảng cách với các phần tử khác */
-}
-.theme-toggle-btn:hover {
-    background-color: var(--bg-card);
-    border-color: var(--primary);
 }
