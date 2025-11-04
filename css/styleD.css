@@ -19,14 +19,18 @@
   --bad: #ef4444;
 }
 
-/* Chế độ Sáng */
+/* Chế độ Sáng - PHIÊN BẢN NÂNG CẤP */
 [data-theme="light"] {
   --bg: #f0f9ff;
-  --bg-elev: #e0f2fe;
+  /* Nền header mới: Xanh thiên thanh đậm hơn */
+  --bg-elev: #cceeff;
   --bg-card: #ffffff;
+  /* Nền mới cho các ô lựa chọn trả lời */
+  --bg-answer: #e0f2fe; 
   --border: #bae6fd;
-  --text: #083344;      /* Xanh đen đậm hơn nữa */
-  --muted: #075985;     /* Xanh dương đậm hơn */
+  --text: #083344;
+  /* Màu mới cho tiêu đề câu hỏi, metadata */
+  --muted: #075985;
   --primary: #0ea5e9;
   --accent: #059669;
   --ok: #16a34a;
@@ -254,7 +258,7 @@ main {
 .answers { display: grid; gap: 6px; margin: 8px 0; }
 .answer {
   display: flex; gap: 8px; align-items: flex-start;
-  background: #0b1324;
+  background: var(--bg-answer);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 8px 10px;
@@ -751,7 +755,7 @@ kbd {
 .theme-toggle-cluster {
     display: flex;
     align-items: center;
-    gap: 1rem; /* Khoảng cách giữa logo và icon */
+    gap: 0.75rem; /* Khoảng cách giữa logo và icon */
     background-color: transparent;
     border: none;
     padding: 0;
@@ -779,4 +783,8 @@ kbd {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.answer span {
+    color: var(--text);
 }
