@@ -6,6 +6,7 @@
 /* ------------------------------
    Biến màu toàn cục
 ------------------------------ */
+/* Chế độ Tối (Mặc định) */
 :root {
   --bg: #0b1220;
   --bg-elev: #10192e;
@@ -14,9 +15,23 @@
   --text: #e5e7eb;
   --muted: #9aa5b1;
   --primary: #2563eb;
+  --accent: #10b981;
   --ok: #22c55e;
   --bad: #ef4444;
-  --accent: #10b981;
+}
+
+/* Chế độ Sáng */
+[data-theme="light"] {
+  --bg: #f0f9ff;
+  --bg-elev: #e0f2fe;
+  --bg-card: #ffffff;
+  --border: #bae6fd;
+  --text: #0c4a6e;
+  --muted: #38bdf8;
+  --primary: #0ea5e9;
+  --accent: #059669;
+  --ok: #16a34a;
+  --bad: #dc2626;
 }
 
 /* ------------------------------
@@ -259,3 +274,25 @@ main {
 }
 
 /* === END: STYLES FOR LOADING SPINNER === */
+
+/* === STYLES FOR THEME TOGGLE BUTTON === */
+.theme-toggle-btn {
+    background-color: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+    margin-left: 1rem; /* Tạo khoảng cách với các phần tử khác */
+}
+.theme-toggle-btn:hover {
+    background-color: var(--bg-card);
+    border-color: var(--primary);
+}
