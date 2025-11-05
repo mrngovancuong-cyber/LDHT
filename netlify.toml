@@ -89,6 +89,13 @@
   to = "https://script.google.com/macros/s/AKfycbyqNDZRUiCo199c_qFJgv8TgAjqwWrXd6h6W-JJ-mL_FsGp1ffPjdiOmsKH1wseuSnAHA/exec"
   status = 200
 
+# Quy tắc cho backend của Cô Thanh Hà (mã lớp: cothanhha)
+# Netlify sẽ kiểm tra quy tắc này TRƯỚC TIÊN.
+[[redirects]]
+  from = "/api/cothanhha/*"
+  to = "https://script.google.com/macros/s/AKfycbxNv6DSN3h1NyFBKbBLBDZf8IUqy7TIVxGfMXPln0HruvoHCUhYh__yQ0qCfJHKANiJkg/exec"
+  status = 200
+
 # (Trong tương lai, bạn sẽ thêm quy tắc cho các giáo viên khác ở đây)
 
 # ===================================================================
