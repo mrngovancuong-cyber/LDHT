@@ -17,6 +17,9 @@
   --accent: #10b981;
   --text-muted: #9aa5b1; /* Màu xám nhạt (như cũ) */
   --bg-explain: rgba(31, 42, 68, 0.3); /* Xanh đậm trong suốt */
+  --bg-ordering-source: #0a101f; /* Giữ màu gốc */
+  --bg-input: #0b1324; /* Giữ màu gốc */
+  --text-input: var(--text); /* Chữ trong ô input dùng màu text chính */
   --ok: #22c55e;
   --bad: #ef4444;
   --timer-color: #facc15; /* Màu vàng cho nền tối */
@@ -38,6 +41,9 @@
   --accent: #059669;
   --text-muted: #082f49; /* Xanh đậm (giống màu chữ câu hỏi) */
   --bg-explain: #e0f2fe; /* Xanh da trời rất nhạt (giống nền ô input) */
+  --bg-ordering-source: #f0f9ff; /* Màu xanh da trời rất-rất nhạt */
+  --bg-input: #ffffff; /* Nền trắng tinh cho ô input */
+  --text-input: #082f49; /* Chữ đậm (giống màu text-muted) */
   --ok: #16a34a;
   --bad: #dc2626;
   --timer-color: #b91c1c; /* Màu đỏ đậm, rất nổi bật */
@@ -415,8 +421,8 @@ kbd {
   font-size: 16px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #0b1324;
-  color: var(--text);
+  background: var(--bg-input);
+  color: var(--text-input);
 }
 .fill-blank-input:focus {
   outline: none;
@@ -741,14 +747,14 @@ kbd {
     flex-direction: column;
     gap: 8px;
     padding: 10px;
-    background: #0a101f;
+    background: var(--bg-ordering-source);
     border-radius: 8px;
 }
 
 /* Các mục có thể kéo */
 .ordering-item {
     padding: 12px;
-    background: var(--bg-card);
+    background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: 6px;
     cursor: grab;

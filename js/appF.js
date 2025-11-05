@@ -1021,11 +1021,11 @@ if (isCorrect) {
     card.classList.add('correct');
     qTitleEl.innerHTML = `<span class="result-icon correct-icon">✔</span>` + qTitleEl.innerHTML;
 } else if (studentAnswer) {
-    exp.innerHTML = `<strong>Sai.</strong> Đáp án đúng là <strong>${escapeHtml(friendlyCorrectAnswer)}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
+    exp.innerHTML = `<strong>Sai.</strong> Đáp án đúng là <strong>${friendlyCorrectAnswer}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
     card.classList.add('incorrect');
     qTitleEl.innerHTML = `<span class="result-icon incorrect-icon">✖</span>` + qTitleEl.innerHTML;
 } else {
-    exp.innerHTML = `<strong>Chưa trả lời.</strong> Đáp án đúng là <strong>${escapeHtml(friendlyCorrectAnswer)}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
+    exp.innerHTML = `<strong>Chưa trả lời.</strong> Đáp án đúng là <strong>${friendlyCorrectAnswer}</strong>. <br><em>Giải thích:</em> ${escapeHtml(qData.explain)}`;
     qTitleEl.innerHTML = `<span class="result-icon unanswered-icon">−</span>` + qTitleEl.innerHTML;
 }
         });
